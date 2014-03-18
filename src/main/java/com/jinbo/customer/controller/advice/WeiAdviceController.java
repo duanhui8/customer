@@ -39,7 +39,7 @@ import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
-import com.jinbo.customer.entity.user.CustomerUserEntity;
+import com.jinbo.customer.entity.customerservice.CustomerUserEntity;
 import com.jinbo.customer.service.user.CustomerUserServiceI;
 
 /**   

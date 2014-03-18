@@ -44,7 +44,7 @@
 			</td>
 			<td class="value">
 		     	 <input id="atitle" name="atitle" type="text" style="width: 150px" class="inputxt"  
-					               
+					               disabled='true'
 					                value='${deptSerPage.atitle}'>
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉标题</label>
@@ -53,20 +53,21 @@
 				<label class="Validform_label">投诉类型:</label>
 			</td>
 			<td class="value">
-					<t:dictSelect field="atype" type="list"
+					<t:dictSelect field="atype" type="list" 
 						typeGroupCode="bugtype" defaultVal="${deptSerPage.atype}" hasLabel="false"  title="投诉类型"></t:dictSelect>     
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉类型</label>
 			</td>
 		</tr>
 		<tr>
-			<td align="right">
-				<label class="Validform_label">投诉内容:</label>
+				<td align="right">
+				<label class="Validform_label">投诉部门:</label>
 			</td>
 			<td class="value">
-				 <textarea id="acontent" name="acontent">${deptSerPage.acontent}</textarea>
+					<t:dictSelect field="aadept" type="list"
+						typeGroupCode="advicedept" defaultVal="${deptSerPage.aadept}" hasLabel="false"  title="投诉部门"></t:dictSelect>     
 				<span class="Validform_checktip"></span>
-				<label class="Validform_label" style="display: none;">投诉内容</label>
+				<label class="Validform_label" style="display: none;">投诉部门</label>
 			</td>
 			<td align="right">
 				<label class="Validform_label">附件:</label>
@@ -79,21 +80,21 @@
 						<c:if test="${deptSerPage.afile!=''}">
 							<a href="${deptSerPage.afile}"  target="_blank" id="afile_href">下载</a>
 						</c:if>
-					   <input class="ui-button" type="button" value="上传附件"
+					   <input class="ui-button" type="button" value="上传附件"  disabled='true'
 									onclick="browseFiles('afile','afile_href')"/>
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">附件</label>
 			</td>
 		</tr>
 		<tr>
-			<td align="right">
-				<label class="Validform_label">投诉部门:</label>
+			
+				<td align="right">
+				<label class="Validform_label">投诉内容:</label>
 			</td>
-			<td class="value">
-					<t:dictSelect field="aadept" type="list"
-						typeGroupCode="advicedept" defaultVal="${deptSerPage.aadept}" hasLabel="false"  title="投诉部门"></t:dictSelect>     
+			<td class="value"  colspan="3">
+				 <textarea id="acontent" name="acontent"  disabled='true'>${deptSerPage.acontent}</textarea>
 				<span class="Validform_checktip"></span>
-				<label class="Validform_label" style="display: none;">投诉部门</label>
+				<label class="Validform_label" style="display: none;">投诉内容</label>
 			</td>
 		</tr>
 			</table>
@@ -115,7 +116,7 @@
 					       	<input name="deptReplyList[#index#].acontent" maxlength="500" 
 						  		type="text" class="inputxt"  style="width:120px;"
 					               
-					               >
+					               />
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 				  </td>
 			</tr>
@@ -123,3 +124,9 @@
 		</table>
  </body>
  <script src = "webpage/com/jinbo/customer/deptservice/deptSer.js"></script>	
+ <script type="text/javascript">
+	var tousu = $("select[name='atype']");
+	tousu.attr("disabled","disabled");
+	var tousu = $("select[name='aadept']");
+	tousu.attr("disabled","disabled");
+ </script>

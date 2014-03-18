@@ -29,7 +29,11 @@
     });
 </script>
 <div style="padding: 3px; height: 25px;width:auto;" class="datagrid-toolbar">
-	<a id="addAdviceReplyBtn" href="#">添加</a> <a id="delAdviceReplyBtn" href="#">删除</a> 
+	<a id="addAdviceReplyBtn" href="#">反馈方式</a> 
+	<t:dictSelect field="dept1" type="list" divClass="backgroud:red"
+						typeGroupCode="returns" defaultVal="${customerAdvicePage.source}" hasLabel="false"  title="投诉部门">
+						</t:dictSelect>      	
+	<!-- <a id="delAdviceReplyBtn" href="#">删除</a>  -->
 </div>
 <div style="width: auto;height: 300px;overflow-y:auto;overflow-x:scroll;">
 <table border="0" cellpadding="2" cellspacing="0" id="adviceReply_table">
@@ -71,10 +75,11 @@
 					<input name="adviceReplyList[${stuts.index }].createName" type="hidden" value="${poVal.createName }"/>
 					<input name="adviceReplyList[${stuts.index }].createDept" type="hidden" value="${poVal.createDept }"/>
 				   <td align="left">
-					       	<input name="adviceReplyList[${stuts.index }].acontent" maxlength="500" 
+<%-- 					       	<input name="adviceReplyList[${stuts.index }].acontent" maxlength="500" 
 						  		type="text" class="inputxt"  style="width:120px;"
 					               
-					                value="${poVal.acontent }">
+					                value="${poVal.acontent }"> --%>
+					               <textarea name="adviceReplyList[${stuts.index }].acontent" disabled="disabled" rows="9" cols="60" >${poVal.acontent }</textarea>
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 				   </td>
    			</tr>

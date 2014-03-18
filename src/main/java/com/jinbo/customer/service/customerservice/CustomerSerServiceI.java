@@ -3,8 +3,9 @@ package com.jinbo.customer.service.customerservice;
 import java.util.List;
 import org.jeecgframework.core.common.service.CommonService;
 import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
+
 import java.io.Serializable;
-import com.jinbo.customer.entity.repyservice.ServiceReplyEntity;
 
 public interface CustomerSerServiceI extends CommonService{
 	

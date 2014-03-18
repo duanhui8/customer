@@ -1,5 +1,4 @@
 
-
 //初始化下标
 function resetTrNum(tableId) {
 	$tbody = $("#"+tableId+"");
@@ -67,3 +66,4 @@ function decode(value, id) {//value传入值,id接受值
 	var filename = value.substring(last + 1, value.length);
 	$("#" + id).text(decodeURIComponent(filename));
 }
+

@@ -2,9 +2,9 @@ package com.jinbo.customer.service.deptservice;
 
 import java.util.List;
 import org.jeecgframework.core.common.service.CommonService;
+import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 
-import com.jinbo.customer.entity.deptreply.DeptReplyEntity;
-import com.jinbo.customer.entity.deptservice.DeptSerEntity;
 import java.io.Serializable;
 
 
@@ -15,32 +15,32 @@ public interface DeptSerServiceI extends CommonService{
 	 * 添加一对多
 	 * 
 	 */
-	public void addMain(DeptSerEntity deptSer,
-	        List<DeptReplyEntity> deptReplyList) ;
+	public void addMain(CustomerSerEntity deptSer,
+	        List<ServiceReplyEntity> deptReplyList) ;
 	/**
 	 * 修改一对多
 	 * 
 	 */
-	public void updateMain(DeptSerEntity deptSer,
-	        List<DeptReplyEntity> deptReplyList);
-	public void delMain (DeptSerEntity deptSer);
+	public void updateMain(CustomerSerEntity deptSer,
+	        List<ServiceReplyEntity> deptReplyList);
+	public void delMain (CustomerSerEntity deptSer);
 	
  	/**
 	 * 默认按钮-sql增强-新增操作
 	 * @param id
 	 * @return
 	 */
- 	public boolean doAddSql(DeptSerEntity t);
+ 	public boolean doAddSql(CustomerSerEntity t);
  	/**
 	 * 默认按钮-sql增强-更新操作
 	 * @param id
 	 * @return
 	 */
- 	public boolean doUpdateSql(DeptSerEntity t);
+ 	public boolean doUpdateSql(CustomerSerEntity t);
  	/**
 	 * 默认按钮-sql增强-删除操作
 	 * @param id
 	 * @return
 	 */
- 	public boolean doDelSql(DeptSerEntity t);
+ 	public boolean doDelSql(CustomerSerEntity t);
 }

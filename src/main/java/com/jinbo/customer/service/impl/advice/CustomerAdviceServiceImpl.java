@@ -4,16 +4,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import org.jeecgframework.core.common.exception.BusinessException;
+
+import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.service.advice.CustomerAdviceServiceI;
 import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
 import org.jeecgframework.core.util.MyBeanUtils;
-import org.jeecgframework.core.util.StringUtil;
-import java.util.ArrayList;
 import java.util.UUID;
-import java.io.Serializable;
 
-import com.jinbo.customer.entity.advice.CustomerAdviceEntity;
-import com.jinbo.customer.entity.replyadvice.AdviceReplyEntity;
 @Service("customerAdviceService")
 @Transactional
 public class CustomerAdviceServiceImpl extends CommonServiceImpl implements CustomerAdviceServiceI {
@@ -21,16 +19,16 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
  	public <T> void delete(T entity) {
  		super.delete(entity);
  		//执行删除操作配置的sql增强
-		this.doDelSql((CustomerAdviceEntity)entity);
+		this.doDelSql((CustomerSerEntity)entity);
  	}
 	
-	public void addMain(CustomerAdviceEntity customerAdvice,
-	        List<AdviceReplyEntity> adviceReplyList){
+	public void addMain(CustomerSerEntity customerAdvice,
+	        List<ServiceReplyEntity> adviceReplyList){
 			//保存主信息
 			this.save(customerAdvice);
 		
 			/**保存-回复投诉*/
-			for(AdviceReplyEntity adviceReply:adviceReplyList){
+			for(ServiceReplyEntity adviceReply:adviceReplyList){
 				//外键设置
 				adviceReply.setAorder(customerAdvice.getAorder());
 				this.save(adviceReply);
@@ -40,8 +38,8 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	}
 
 	
-	public void updateMain(CustomerAdviceEntity customerAdvice,
-	        List<AdviceReplyEntity> adviceReplyList) {
+	public void updateMain(CustomerSerEntity customerAdvice,
+	        List<ServiceReplyEntity> adviceReplyList) {
 		//保存主表信息
 		this.saveOrUpdate(customerAdvice);
 		//===================================================================================
@@ -49,12 +47,12 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 		Object aORDER0 = customerAdvice.getAorder();
 		//===================================================================================
 		//1.查询出数据库的明细数据-回复投诉
-	    String hql0 = "from AdviceReplyEntity where 1 = 1 AND aORDER = ? ";
-	    List<AdviceReplyEntity> adviceReplyOldList = this.findHql(hql0,aORDER0);
+	    String hql0 = "from ServiceReplyEntity where 1 = 1 AND aORDER = ? ";
+	    List<ServiceReplyEntity> adviceReplyOldList = this.findHql(hql0,aORDER0);
 		//2.筛选更新明细数据-回复投诉
-		for(AdviceReplyEntity oldE:adviceReplyOldList){
+		for(ServiceReplyEntity oldE:adviceReplyOldList){
 			boolean isUpdate = false;
-				for(AdviceReplyEntity sendE:adviceReplyList){
+				for(ServiceReplyEntity sendE:adviceReplyList){
 					//需要更新的明细数据-回复投诉
 					if(oldE.getId().equals(sendE.getId())){
 		    			try {
@@ -75,7 +73,7 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	    		
 			}
 			//3.持久化新增的数据-回复投诉
-			for(AdviceReplyEntity adviceReply:adviceReplyList){
+			for(ServiceReplyEntity adviceReply:adviceReplyList){
 				if(adviceReply.getId()!=null){
 					//外键设置
 					adviceReply.setAorder(customerAdvice.getAorder());
@@ -87,7 +85,7 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	}
 
 	
-	public void delMain(CustomerAdviceEntity customerAdvice) {
+	public void delMain(CustomerSerEntity customerAdvice) {
 		//删除主表信息
 		this.delete(customerAdvice);
 		//===================================================================================
@@ -95,8 +93,8 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 		Object aORDER0 = customerAdvice.getAorder();
 		//===================================================================================
 		//删除-回复投诉
-	    String hql0 = "from AdviceReplyEntity where 1 = 1 AND aORDER = ? ";
-	    List<AdviceReplyEntity> adviceReplyOldList = this.findHql(hql0,aORDER0);
+	    String hql0 = "from ServiceReplyEntity where 1 = 1 AND aORDER = ? ";
+	    List<ServiceReplyEntity> adviceReplyOldList = this.findHql(hql0,aORDER0);
 		this.deleteAllEntitie(adviceReplyOldList);
 	}
 	
@@ -106,7 +104,7 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	 * @param id
 	 * @return
 	 */
- 	public boolean doAddSql(CustomerAdviceEntity t){
+ 	public boolean doAddSql(CustomerSerEntity t){
 	 	return true;
  	}
  	/**
@@ -114,7 +112,7 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	 * @param id
 	 * @return
 	 */
- 	public boolean doUpdateSql(CustomerAdviceEntity t){
+ 	public boolean doUpdateSql(CustomerSerEntity t){
 	 	return true;
  	}
  	/**
@@ -122,7 +120,7 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	 * @param id
 	 * @return
 	 */
- 	public boolean doDelSql(CustomerAdviceEntity t){
+ 	public boolean doDelSql(CustomerSerEntity t){
 	 	return true;
  	}
  	
@@ -131,7 +129,7 @@ public class CustomerAdviceServiceImpl extends CommonServiceImpl implements Cust
 	 * @param sql
 	 * @return
 	 */
- 	public String replaceVal(String sql,CustomerAdviceEntity t){
+ 	public String replaceVal(String sql,CustomerSerEntity t){
  		sql  = sql.replace("#{id}",String.valueOf(t.getId()));
  		sql  = sql.replace("#{aorder}",String.valueOf(t.getAorder()));
  		sql  = sql.replace("#{atitle}",String.valueOf(t.getAtitle()));

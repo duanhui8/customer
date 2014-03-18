@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import org.jeecgframework.core.common.exception.BusinessException;
+
+import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.service.deptservice.DeptSerServiceI;
 import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
 import org.jeecgframework.core.util.MyBeanUtils;
@@ -12,8 +15,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.io.Serializable;
 
-import com.jinbo.customer.entity.deptreply.DeptReplyEntity;
-import com.jinbo.customer.entity.deptservice.DeptSerEntity;
+
 @Service("deptSerService")
 @Transactional
 public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServiceI {
@@ -21,15 +23,15 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
  	public <T> void delete(T entity) {
  		super.delete(entity);
  		//执行删除操作配置的sql增强
-		this.doDelSql((DeptSerEntity)entity);
+		this.doDelSql((CustomerSerEntity)entity);
  	}
 	
-	public void addMain(DeptSerEntity deptSer,List<DeptReplyEntity> deptReplyList){
+	public void addMain(CustomerSerEntity deptSer,List<ServiceReplyEntity> deptReplyList){
 			//保存主信息
 			this.save(deptSer);
 		
 			/**保存-部门回复*/
-			for(DeptReplyEntity deptReply:deptReplyList){
+			for(ServiceReplyEntity deptReply:deptReplyList){
 				//外键设置
 				deptReply.setAorder(deptSer.getAorder());
 				this.save(deptReply);
@@ -39,7 +41,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	}
 
 	
-	public void updateMain(DeptSerEntity deptSer,List<DeptReplyEntity> deptReplyList) {
+	public void updateMain(CustomerSerEntity deptSer,List<ServiceReplyEntity> deptReplyList) {
 		//保存主表信息
 		this.saveOrUpdate(deptSer);
 		//===================================================================================
@@ -47,12 +49,12 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 		Object aORDER0 = deptSer.getAorder();
 		//===================================================================================
 		//1.查询出数据库的明细数据-部门回复
-	    String hql0 = "from deptReplyEntity where 1 = 1 AND aORDER = ? ";
-	    List<DeptReplyEntity> deptReplyOldList = this.findHql(hql0,aORDER0);
+	    String hql0 = "from ServiceReplyEntity where 1 = 1 AND aORDER = ? ";
+	    List<ServiceReplyEntity> deptReplyOldList = this.findHql(hql0,aORDER0);
 		//2.筛选更新明细数据-部门回复
-		for(DeptReplyEntity oldE:deptReplyOldList){
+		for(ServiceReplyEntity oldE:deptReplyOldList){
 			boolean isUpdate = false;
-				for(DeptReplyEntity sendE:deptReplyList){
+				for(ServiceReplyEntity sendE:deptReplyList){
 					//需要更新的明细数据-部门回复
 					if(oldE.getId().equals(sendE.getId())){
 		    			try {
@@ -73,7 +75,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	    		
 			}
 			//3.持久化新增的数据-部门回复
-			for(DeptReplyEntity deptReply:deptReplyList){
+			for(ServiceReplyEntity deptReply:deptReplyList){
 				if(deptReply.getId()!=null){
 					//外键设置
 					deptReply.setAorder(deptSer.getAorder());
@@ -85,7 +87,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	}
 
 	
-	public void delMain(DeptSerEntity deptSer) {
+	public void delMain(CustomerSerEntity deptSer) {
 		//删除主表信息
 		this.delete(deptSer);
 		//===================================================================================
@@ -93,8 +95,8 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 		Object aORDER0 = deptSer.getAorder();
 		//===================================================================================
 		//删除-部门回复
-	    String hql0 = "from deptReplyEntity where 1 = 1 AND aORDER = ? ";
-	    List<DeptReplyEntity> deptReplyOldList = this.findHql(hql0,aORDER0);
+	    String hql0 = "from ServiceReplyEntity where 1 = 1 AND aORDER = ? ";
+	    List<ServiceReplyEntity> deptReplyOldList = this.findHql(hql0,aORDER0);
 		this.deleteAllEntitie(deptReplyOldList);
 	}
 	
@@ -104,7 +106,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	 * @param id
 	 * @return
 	 */
- 	public boolean doAddSql(DeptSerEntity t){
+ 	public boolean doAddSql(CustomerSerEntity t){
 	 	return true;
  	}
  	/**
@@ -112,7 +114,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	 * @param id
 	 * @return
 	 */
- 	public boolean doUpdateSql(DeptSerEntity t){
+ 	public boolean doUpdateSql(CustomerSerEntity t){
 	 	return true;
  	}
  	/**
@@ -120,7 +122,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	 * @param id
 	 * @return
 	 */
- 	public boolean doDelSql(DeptSerEntity t){
+ 	public boolean doDelSql(CustomerSerEntity t){
 	 	return true;
  	}
  	
@@ -129,7 +131,7 @@ public class DeptSerServiceImpl extends CommonServiceImpl implements DeptSerServ
 	 * @param sql
 	 * @return
 	 */
- 	public String replaceVal(String sql,DeptSerEntity t){
+ 	public String replaceVal(String sql,CustomerSerEntity t){
  		sql  = sql.replace("#{id}",String.valueOf(t.getId()));
  		sql  = sql.replace("#{aorder}",String.valueOf(t.getAorder()));
  		sql  = sql.replace("#{atitle}",String.valueOf(t.getAtitle()));

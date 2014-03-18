@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.SequenceGenerator;
-import com.jinbo.customer.entity.deptreply.DeptReplyEntity;
+import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
+
 
 /**   
  * @Title: Entity
@@ -28,11 +29,11 @@ import com.jinbo.customer.entity.deptreply.DeptReplyEntity;
 @SuppressWarnings("serial")
 public class DeptSerPage implements java.io.Serializable {
 	/**保存-部门回复*/
-	private List<DeptReplyEntity> deptReplyList = new ArrayList<DeptReplyEntity>();
-	public List<DeptReplyEntity> getdeptReplyList() {
+	private List<ServiceReplyEntity> deptReplyList = new ArrayList<ServiceReplyEntity>();
+	public List<ServiceReplyEntity> getdeptReplyList() {
 		return deptReplyList;
 	}
-	public void setdeptReplyList(List<DeptReplyEntity> deptReplyList) {
+	public void setdeptReplyList(List<ServiceReplyEntity> deptReplyList) {
 		this.deptReplyList = deptReplyList;
 	}
 

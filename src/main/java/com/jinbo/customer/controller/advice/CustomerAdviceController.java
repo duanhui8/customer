@@ -26,10 +26,11 @@ import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
-import com.jinbo.customer.entity.advice.CustomerAdviceEntity;
+import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.page.advice.CustomerAdvicePage;
 import com.jinbo.customer.service.advice.CustomerAdviceServiceI;
-import com.jinbo.customer.entity.replyadvice.AdviceReplyEntity;
+
 /**   
  * @Title: Controller
  * @Description: 客户投诉
@@ -81,8 +82,8 @@ public class CustomerAdviceController extends BaseController {
 	 */
 
 	@RequestMapping(params = "datagrid")
-	public void datagrid(CustomerAdviceEntity customerAdvice,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
-		CriteriaQuery cq = new CriteriaQuery(CustomerAdviceEntity.class, dataGrid);
+	public void datagrid(CustomerSerEntity customerAdvice,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+		CriteriaQuery cq = new CriteriaQuery(CustomerSerEntity.class, dataGrid);
 		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, customerAdvice);
 		try{
@@ -112,9 +113,9 @@ public class CustomerAdviceController extends BaseController {
 	 */
 	@RequestMapping(params = "doDel")
 	@ResponseBody
-	public AjaxJson doDel(CustomerAdviceEntity customerAdvice, HttpServletRequest request) {
+	public AjaxJson doDel(CustomerSerEntity customerAdvice, HttpServletRequest request) {
 		AjaxJson j = new AjaxJson();
-		customerAdvice = systemService.getEntity(CustomerAdviceEntity.class, customerAdvice.getId());
+		customerAdvice = systemService.getEntity(CustomerSerEntity.class, customerAdvice.getId());
 		message = "客户投诉删除成功";
 		try{
 			if(!customerAdvice.getAstatus().equalsIgnoreCase("0")){
@@ -146,7 +147,7 @@ public class CustomerAdviceController extends BaseController {
 		message = "客户投诉删除成功";
 		try{
 			for(String id:ids.split(",")){
-				CustomerAdviceEntity customerAdvice = systemService.getEntity(CustomerAdviceEntity.class,
+				CustomerSerEntity customerAdvice = systemService.getEntity(CustomerSerEntity.class,
 				id
 				);
 				if(customerAdvice.getAorder()==null||customerAdvice.getAorder().equalsIgnoreCase("")||customerAdvice.getAorder().length()<=0){					
@@ -174,8 +175,8 @@ public class CustomerAdviceController extends BaseController {
 	 */
 	@RequestMapping(params = "doAdd")
 	@ResponseBody
-	public AjaxJson doAdd(CustomerAdviceEntity customerAdvice,CustomerAdvicePage customerAdvicePage, HttpServletRequest request) {
-		//List<AdviceReplyEntity> adviceReplyList =  customerAdvicePage.getAdviceReplyList();
+	public AjaxJson doAdd(CustomerSerEntity customerAdvice,CustomerAdvicePage customerAdvicePage, HttpServletRequest request) {
+		//List<ServiceReplyEntity> adviceReplyList =  customerAdvicePage.getAdviceReplyList();
 		AjaxJson j = new AjaxJson();
 		message = "添加成功";
 		try{
@@ -205,8 +206,8 @@ public class CustomerAdviceController extends BaseController {
 	 */
 	@RequestMapping(params = "doUpdate")
 	@ResponseBody
-	public AjaxJson doUpdate(CustomerAdviceEntity customerAdvice,CustomerAdvicePage customerAdvicePage, HttpServletRequest request) {
-		List<AdviceReplyEntity> adviceReplyList =  customerAdvicePage.getAdviceReplyList();
+	public AjaxJson doUpdate(CustomerSerEntity customerAdvice,CustomerAdvicePage customerAdvicePage, HttpServletRequest request) {
+		List<ServiceReplyEntity> adviceReplyList =  customerAdvicePage.getAdviceReplyList();
 		AjaxJson j = new AjaxJson();
 		message = "更新成功";
 		try{
@@ -227,9 +228,9 @@ public class CustomerAdviceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
-	public ModelAndView goAdd(CustomerAdviceEntity customerAdvice, HttpServletRequest req) {
+	public ModelAndView goAdd(CustomerSerEntity customerAdvice, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(customerAdvice.getId())) {
-			customerAdvice = customerAdviceService.getEntity(CustomerAdviceEntity.class, customerAdvice.getId());
+			customerAdvice = customerAdviceService.getEntity(CustomerSerEntity.class, customerAdvice.getId());
 			req.setAttribute("customerAdvicePage", customerAdvice);
 		}
 		return new ModelAndView("com/jinbo/customer/advice/customerAdvice-add");
@@ -241,9 +242,9 @@ public class CustomerAdviceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
-	public ModelAndView goUpdate(CustomerAdviceEntity customerAdvice, HttpServletRequest req) {
+	public ModelAndView goUpdate(CustomerSerEntity customerAdvice, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(customerAdvice.getId())) {
-			customerAdvice = customerAdviceService.getEntity(CustomerAdviceEntity.class, customerAdvice.getId());
+			customerAdvice = customerAdviceService.getEntity(CustomerSerEntity.class, customerAdvice.getId());
 			req.setAttribute("customerAdvicePage", customerAdvice);
 		}
 		return new ModelAndView("com/jinbo/customer/advice/customerAdvice-update");
@@ -256,17 +257,17 @@ public class CustomerAdviceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "adviceReplyList")
-	public ModelAndView adviceReplyList(CustomerAdviceEntity customerAdvice, HttpServletRequest req) {
+	public ModelAndView adviceReplyList(CustomerSerEntity customerAdvice, HttpServletRequest req) {
 	
 		//===================================================================================
 		//获取参数
 		Object aORDER0 = customerAdvice.getAorder();
 		//===================================================================================
 		//查询-回复投诉
-	    String hql0 = "from AdviceReplyEntity where 1 = 1 AND aORDER = ? ";
+	    String hql0 = "from ServiceReplyEntity where 1 = 1 AND aORDER = ? ";
 	    try{
-	    	List<AdviceReplyEntity> adviceReplyEntityList = systemService.findHql(hql0,aORDER0);
-			req.setAttribute("adviceReplyList", adviceReplyEntityList);
+	    	List<ServiceReplyEntity> ServiceReplyEntityList = systemService.findHql(hql0,aORDER0);
+			req.setAttribute("adviceReplyList", ServiceReplyEntityList);
 		}catch(Exception e){
 			logger.info(e.getMessage());
 		}

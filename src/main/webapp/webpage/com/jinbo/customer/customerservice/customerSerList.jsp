@@ -27,10 +27,11 @@
    <t:dgCol title="反馈人"  field="comName"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="查看" url="customerSerController.do?goUpdate" funname="detail"/>
-   <t:dgToolBar title="客户电话投诉受理" icon="icon-add" url="customerSerController.do?goAdd" funname="add" height="450"></t:dgToolBar>
    <t:dgToolBar title="受理单确认" icon="icon-edit" url="customerSerController.do?doBatchConfirm" funname="confirms" height="450"></t:dgToolBar>
    <t:dgToolBar title="受理单下发"  icon="icon-remove" url="customerSerController.do?goUpdate" funname="update" height="450"></t:dgToolBar>
-   <t:dgToolBar title="受理单反馈查看" icon="icon-search" url="customerSerController.do?goUpdate" funname="detail" height="450"></t:dgToolBar>
+   <t:dgToolBar title="查看处理" icon="icon-search" url="customerSerController.do?goQuery" funname="detail" height="450"></t:dgToolBar>
+   <t:dgToolBar title="受理单反馈" icon="icon-search" url="customerSerController.do?goReturnResult" funname="update" height="450"></t:dgToolBar>
+   <t:dgToolBar title="客户电话投诉受理" icon="icon-add" url="customerSerController.do?goAdd" funname="add" height="450"></t:dgToolBar>
   </t:datagrid>
   </div>
  </div>

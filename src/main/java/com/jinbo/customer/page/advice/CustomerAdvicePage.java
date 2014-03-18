@@ -12,9 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
+
 import javax.persistence.SequenceGenerator;
 
-import com.jinbo.customer.entity.replyadvice.AdviceReplyEntity;
 
 /**   
  * @Title: Entity
@@ -29,11 +31,11 @@ import com.jinbo.customer.entity.replyadvice.AdviceReplyEntity;
 @SuppressWarnings("serial")
 public class CustomerAdvicePage implements java.io.Serializable {
 	/**保存-回复投诉*/
-	private List<AdviceReplyEntity> adviceReplyList = new ArrayList<AdviceReplyEntity>();
-	public List<AdviceReplyEntity> getAdviceReplyList() {
+	private List<ServiceReplyEntity> adviceReplyList = new ArrayList<ServiceReplyEntity>();
+	public List<ServiceReplyEntity> getAdviceReplyList() {
 		return adviceReplyList;
 	}
-	public void setAdviceReplyList(List<AdviceReplyEntity> adviceReplyList) {
+	public void setAdviceReplyList(List<ServiceReplyEntity> adviceReplyList) {
 		this.adviceReplyList = adviceReplyList;
 	}
 

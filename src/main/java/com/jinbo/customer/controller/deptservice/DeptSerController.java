@@ -17,16 +17,20 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.DataUtils;
+import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
-import com.jinbo.customer.entity.deptreply.DeptReplyEntity;
-import com.jinbo.customer.entity.deptservice.DeptSerEntity;
+import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.page.deptservice.DeptSerPage;
 import com.jinbo.customer.service.deptservice.DeptSerServiceI;
+
+import freemarker.template.utility.DateUtil;
 
 /**   
  * @Title: Controller
@@ -79,8 +83,8 @@ public class DeptSerController extends BaseController {
 	 */
 
 	@RequestMapping(params = "datagrid")
-	public void datagrid(DeptSerEntity deptSer,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
-		CriteriaQuery cq = new CriteriaQuery(DeptSerEntity.class, dataGrid);
+	public void datagrid(CustomerSerEntity deptSer,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+		CriteriaQuery cq = new CriteriaQuery(CustomerSerEntity.class, dataGrid);
 		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, deptSer);
 		try{
@@ -96,6 +100,7 @@ public class DeptSerController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
+		cq.eq("astatus", "1");
 		cq.add();
 		this.deptSerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -108,9 +113,9 @@ public class DeptSerController extends BaseController {
 	 */
 	@RequestMapping(params = "doDel")
 	@ResponseBody
-	public AjaxJson doDel(DeptSerEntity deptSer, HttpServletRequest request) {
+	public AjaxJson doDel(CustomerSerEntity deptSer, HttpServletRequest request) {
 		AjaxJson j = new AjaxJson();
-		deptSer = systemService.getEntity(DeptSerEntity.class, deptSer.getId());
+		deptSer = systemService.getEntity(CustomerSerEntity.class, deptSer.getId());
 		message = "客户投诉删除成功";
 		try{
 			deptSerService.delete(deptSer);
@@ -136,7 +141,7 @@ public class DeptSerController extends BaseController {
 		message = "客户投诉删除成功";
 		try{
 			for(String id:ids.split(",")){
-				DeptSerEntity deptSer = systemService.getEntity(DeptSerEntity.class,
+				CustomerSerEntity deptSer = systemService.getEntity(CustomerSerEntity.class,
 				id
 				);
 				deptSerService.delete(deptSer);
@@ -159,8 +164,8 @@ public class DeptSerController extends BaseController {
 	 */
 	@RequestMapping(params = "doAdd")
 	@ResponseBody
-	public AjaxJson doAdd(DeptSerEntity deptSer,DeptSerPage deptSerPage, HttpServletRequest request) {
-		List<DeptReplyEntity> deptReplyList =  deptSerPage.getdeptReplyList();
+	public AjaxJson doAdd(CustomerSerEntity deptSer,DeptSerPage deptSerPage, HttpServletRequest request) {
+		List<ServiceReplyEntity> deptReplyList =  deptSerPage.getdeptReplyList();
 		AjaxJson j = new AjaxJson();
 		message = "添加成功";
 		try{
@@ -180,18 +185,38 @@ public class DeptSerController extends BaseController {
 	 * @param ids
 	 * @return
 	 */
-	@RequestMapping(params = "doUpdate")
+	@RequestMapping(params = "doUpdate")//处理方法
 	@ResponseBody
-	public AjaxJson doUpdate(DeptSerEntity deptSer,DeptSerPage deptSerPage, HttpServletRequest request) {
-		List<DeptReplyEntity> deptReplyList =  deptSerPage.getdeptReplyList();
+	public AjaxJson doUpdate(CustomerSerEntity deptSer,DeptSerPage deptSerPage, HttpServletRequest request) {
+		List<ServiceReplyEntity> deptReplyList =  deptSerPage.getdeptReplyList();
 		AjaxJson j = new AjaxJson();
-		message = "更新成功";
+		message = "回复成功";
 		try{
-			deptSerService.updateMain(deptSer, deptReplyList);
+			CustomerSerEntity dept = systemService.getEntity(CustomerSerEntity.class, deptSer.getId());
+		    dept.setAstatus("2");
+		    dept.setDeDatetime(DataUtils.getDate());
+		    dept.setDeName(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
+		    systemService.updateEntitie(dept);
+			for(ServiceReplyEntity de:deptReplyList){
+			if(de.getId()==null||de.getId().length()<=0){
+     			de.setCreateDatetime(DataUtils.getDate());
+				de.setAorder(deptSer.getAorder());
+				de.setCreateName(ResourceUtil.getSessionUserName().getUserName());
+				de.setCreateDept(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
+				deptSerService.save(de);
+			}else{
+				deptSerService.updateEntitie(de);
+				
+			}
+		}
+		   
+	//		String adviceId = deptSer.getId();
+//			ServiceReplyEntity dereply = new ServiceReplyEntity();
+//			deptSerService.updateMain(deptSer, deptReplyList);
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
 			e.printStackTrace();
-			message = "更新客户投诉失败";
+			message = "回复客户投诉失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -204,9 +229,9 @@ public class DeptSerController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
-	public ModelAndView goAdd(DeptSerEntity deptSer, HttpServletRequest req) {
+	public ModelAndView goAdd(CustomerSerEntity deptSer, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(deptSer.getId())) {
-			deptSer = deptSerService.getEntity(DeptSerEntity.class, deptSer.getId());
+			deptSer = deptSerService.getEntity(CustomerSerEntity.class, deptSer.getId());
 			req.setAttribute("deptSerPage", deptSer);
 		}
 		return new ModelAndView("com/jinbo/customer/deptservice/deptSer-add");
@@ -218,9 +243,9 @@ public class DeptSerController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
-	public ModelAndView goUpdate(DeptSerEntity deptSer, HttpServletRequest req) {
+	public ModelAndView goUpdate(CustomerSerEntity deptSer, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(deptSer.getId())) {
-			deptSer = deptSerService.getEntity(DeptSerEntity.class, deptSer.getId());
+			deptSer = deptSerService.getEntity(CustomerSerEntity.class, deptSer.getId());
 			req.setAttribute("deptSerPage", deptSer);
 		}
 		return new ModelAndView("com/jinbo/customer/deptservice/deptSer-update");
@@ -233,17 +258,17 @@ public class DeptSerController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "deptReplyList")
-	public ModelAndView deptReplyList(DeptSerEntity deptSer, HttpServletRequest req) {
+	public ModelAndView deptReplyList(CustomerSerEntity deptSer, HttpServletRequest req) {
 	
 		//===================================================================================
 		//获取参数
 		Object aORDER0 = deptSer.getAorder();
 		//===================================================================================
 		//查询-部门回复
-	    String hql0 = "from deptReplyEntity where 1 = 1 AND aORDER = ? ";
+	    String hql0 = "from ServiceReplyEntity e where 1 = 1 AND e.aorder = ? ";
 	    try{
-	    	List<DeptReplyEntity> deptReplyEntityList = systemService.findHql(hql0,aORDER0);
-			req.setAttribute("deptReplyList", deptReplyEntityList);
+	    	List<ServiceReplyEntity> ServiceReplyEntityList = systemService.findHql(hql0,aORDER0);
+			req.setAttribute("deptReplyList", ServiceReplyEntityList);
 		}catch(Exception e){
 			logger.info(e.getMessage());
 		}

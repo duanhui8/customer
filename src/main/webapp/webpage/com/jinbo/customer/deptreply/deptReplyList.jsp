@@ -52,10 +52,11 @@
 					<input name="deptReplyList[0].createName" type="hidden"/>
 					<input name="deptReplyList[0].createDept" type="hidden"/>
 				  <td align="left">
-					       	<input name="deptReplyList[0].acontent" maxlength="500" 
+				<!-- 	       	<input name="deptReplyList[0].acontent" maxlength="500" 
 						  		type="text" class="inputxt"  style="width:120px;"
 					               
-					                >
+					                > -->
+					                <textarea name="deptReplyList[0].acontent" rows="9" cols="60" ></textarea>
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 					</td>
    			</tr>
@@ -71,10 +72,11 @@
 					<input name="deptReplyList[${stuts.index }].createName" type="hidden" value="${poVal.createName }"/>
 					<input name="deptReplyList[${stuts.index }].createDept" type="hidden" value="${poVal.createDept }"/>
 				   <td align="left">
-					       	<input name="deptReplyList[${stuts.index }].acontent" maxlength="500" 
+				<%-- 	       	<input name="deptReplyList[${stuts.index }].acontent" maxlength="500" 
 						  		type="text" class="inputxt"  style="width:120px;"
 					               
-					                value="${poVal.acontent }">
+					                value="${poVal.acontent }"> --%>
+					                <textarea name="deptReplyList[0].acontent" rows="9" cols="60" >${poVal.acontent }</textarea>
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 				   </td>
    			</tr>

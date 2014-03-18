@@ -43,7 +43,7 @@
 				<label class="Validform_label">投诉标题:</label>
 			</td>
 			<td class="value">
-		     	 <input id="atitle" name="atitle" type="text" style="width: 150px" class="inputxt"  
+		     	 <input id="atitle" name="atitle" disabled="disabled" type="text" style="width: 150px" class="inputxt"  
 					               
 					                value='${customerSerPage.atitle}'>
 				<span class="Validform_checktip"></span>
@@ -64,7 +64,7 @@
 				<label class="Validform_label">投诉内容:</label>
 			</td>
 			<td class="value">
-				 <textarea id="acontent" name="acontent">${customerSerPage.acontent}</textarea>
+				 <textarea id="acontent" name="acontent" disabled="disabled">${customerSerPage.acontent}</textarea>
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉内容</label>
 			</td>
@@ -80,7 +80,7 @@
 							<a href="${customerSerPage.afile}"  target="_blank" id="afile_href">下载</a>
 						</c:if>
 					   <input class="ui-button" type="button" value="上传附件"
-									onclick="browseFiles('afile','afile_href')"/>
+								disabled="disabled"	onclick="browseFiles('afile','afile_href')"/>
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">附件</label>
 			</td>
@@ -101,7 +101,7 @@
 				<%-- 增加一个div，用于调节页面大小，否则默认太小 --%>
 				<div style="width:800px;height:1px;"></div>
 				<t:tabs id="tt" iframe="false" tabPosition="top" fit="false">
-				 <t:tab href="customerSerController.do?adviceReplyList&aorder=${customerSerPage.aorder}" icon="icon-search" title="客户查询处理结果" id="adviceReply"></t:tab>
+				 <t:tab href="customerSerController.do?adviceReplyList&aorder=${customerSerPage.aorder}" icon="icon-search" title="下发投诉" id="adviceReply"></t:tab>
 				</t:tabs>
 			</div>
 			</t:formvalid>
@@ -122,4 +122,10 @@
 		 </tbody>
 		</table>
  </body>
- <script src = "webpage/com/jinbo/customer/customerservice/customerSer.js"></script>	
+ <script src = "webpage/com/jinbo/customer/customerservice/customerSer.js"></script>
+  <script type="text/javascript">
+	var tousu = $("select[name='atype']");
+	tousu.attr("disabled","disabled");
+	var tousu = $("select[name='aadept']");
+	tousu.attr("disabled","disabled");
+ </script>	

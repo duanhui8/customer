@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.SequenceGenerator;
 
-import com.jinbo.customer.entity.repyservice.ServiceReplyEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 
 /**   
  * @Title: Entity

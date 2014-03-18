@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jinbo.customer.entity.user.CustomerUserEntity;
+import com.jinbo.customer.entity.customerservice.CustomerUserEntity;
 
 
 /**

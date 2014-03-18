@@ -10,7 +10,7 @@
    <t:dgCol title="投诉内容"  field="acontent"  hidden="true"  queryMode="single"  width="200"></t:dgCol>
    <t:dgCol title="投诉来源"  field="ainfo"  hidden="false"  queryMode="single" dictionary="adsource" width="120"></t:dgCol>
    <t:dgCol title="客服状态"  field="aktatus"  dictionary="s_status"  width="60" queryMode="single" ></t:dgCol>
-   <t:dgCol title="客服备注"  field="anotes"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
+   <t:dgCol title="客服备注"  field="anotes"   queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="进度"  field="astatus"  hidden="true" dictionary="a_status" width="70"></t:dgCol>
    <t:dgCol title="投诉时间"  field="createDatetime" formatter="yyyy-MM-dd hh:mm:ss" hidden="true" query="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="投诉人"  field="createName"  hidden="false"  queryMode="single"  width="80"></t:dgCol>

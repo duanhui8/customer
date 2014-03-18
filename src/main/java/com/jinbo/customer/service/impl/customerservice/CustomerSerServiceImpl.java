@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.io.Serializable;
 
 import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
-import com.jinbo.customer.entity.repyservice.ServiceReplyEntity;
+import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 @Service("customerSerService")
 @Transactional
 public class CustomerSerServiceImpl extends CommonServiceImpl implements CustomerSerServiceI {
