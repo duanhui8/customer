@@ -16,11 +16,11 @@
    <t:dgCol title="投诉人"  field="createName"  hidden="false"  queryMode="single"  width="80"></t:dgCol>
    <t:dgCol title="客户账号"  field="azhtype"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="公司名"  field="arealname"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
-   <t:dgCol title="受理时间"  field="slDatetime"  hidden="true"  queryMode="single"  width="120"></t:dgCol>
+   <t:dgCol title="受理时间"  field="slDatetime"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="受理人"  field="slName"  hidden="false"  queryMode="single"  width="80"></t:dgCol>
    <t:dgCol title="部门处理时间"  field="deDatetime" formatter="yyyy-MM-dd hh:mm:ss" hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="处理人"  field="deName"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
-   <t:dgCol title="反馈时间"  field="comDatetime"  hidden="true"  queryMode="single"  width="120"></t:dgCol>
+   <t:dgCol title="反馈时间"  field="comDatetime"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="反馈人"  field="comName"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="附件"  field="afile"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="电话"  field="atel"  hidden="false"  queryMode="single"  width="80"></t:dgCol>

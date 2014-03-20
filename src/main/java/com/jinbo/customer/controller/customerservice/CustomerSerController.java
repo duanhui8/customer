@@ -98,6 +98,7 @@ public class CustomerSerController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
+		cq.le("astatus", "2");
 		cq.add();
 		this.customerSerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -129,7 +130,7 @@ public class CustomerSerController extends BaseController {
 
 
 	/**
-	 * 更新客服
+	 * 下发投诉单
 	 * 
 	 * @param ids
 	 * @return
@@ -144,11 +145,11 @@ public class CustomerSerController extends BaseController {
             String note = (String) request.getParameter("note");
             String dept = (String) request.getParameter("dept1");
             CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
-            if(cus.getAstatus().equalsIgnoreCase("1")){
-            	message = "该投诉单已经下发";
-            }else{            	
+            if(cus.getAktatus().equalsIgnoreCase("0")){
+            	message = "请先确认!";
+            }else if(cus.getAktatus().equalsIgnoreCase("1")){            	
             	cus.setAnotes(note);
-            	cus.setAstatus("1");
+            	cus.setAstatus("2");
             	cus.setAadept(dept);          	
             }
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
@@ -168,6 +169,29 @@ public class CustomerSerController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "反馈结果成功";
 		try{
+			String returnS = request.getParameter("returnS");
+			CustomerSerEntity cu = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
+			if(cu.getAstatus().equalsIgnoreCase("3")){
+				if(returnS.equalsIgnoreCase("0")){
+					message = "网页反馈结果成功";
+					CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
+					cus.setAstatus("3");
+					cus.setComDatetime(DataUtils.getDate());
+					cus.setComName(ResourceUtil.getSessionUserName().getUserName());
+				}else if(returnS.equalsIgnoreCase("2")){
+					message = "短信反馈结果成功";
+					
+				}
+				
+			}else if(cu.getAstatus().equalsIgnoreCase("0")||cu.getAstatus().equalsIgnoreCase("1")){
+				message = "请先确认下发";				
+			}else if(cu.getAstatus().equalsIgnoreCase("2")){
+				message = "等待部门处理";				
+			}else{
+				message = "该投诉已完成";	
+				
+			}
+			
  /*           String note = (String) request.getParameter("note");
             String dept = (String) request.getParameter("dept1");
             CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
@@ -270,7 +294,7 @@ public class CustomerSerController extends BaseController {
 		}catch(Exception e){
 			logger.info(e.getMessage());
 		}
-		return new ModelAndView("com/jinbo/customer/repyservice/adviceReplyList");
+		return new ModelAndView("com/jinbo/customer/repyservice/adviceReplyList2");
 	}
 	
 	
@@ -290,7 +314,7 @@ public class CustomerSerController extends BaseController {
 				CustomerSerEntity customerSer = systemService.getEntity(CustomerSerEntity.class,
 				id
 				);
-			    if(customerSer.getAorder()==null||customerSer.getAorder().equalsIgnoreCase("")||customerSer.getAorder().length()<=0){
+			    if(customerSer.getAstatus().equalsIgnoreCase("0")){
 			    	String num = RandomUtils.getUsername(7);
 					count = systemService.getCountForJdbc("select count(*) from customer_advice where aorder ='"+num+"'");
 				    while(count!=0){
@@ -301,6 +325,7 @@ public class CustomerSerController extends BaseController {
 				    customerSer.setSlName(ResourceUtil.getSessionUserName().getUserName());
 				    customerSer.setAorder(num);
 				    customerSer.setAktatus("1");
+				    customerSer.setAstatus("1");
 					customerSerService.updateEntitie(customerSer);
 					systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			    }else{
@@ -316,6 +341,42 @@ public class CustomerSerController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
+	 
+	 /**
+		 * 批量取消确认
+		 * 
+		 * @return
+		 */
+		 @RequestMapping(params = "doBatchCancel")
+		@ResponseBody
+		public AjaxJson doBatchCancel(String ids,HttpServletRequest request){
+			long count =1;
+			AjaxJson j = new AjaxJson();
+			message = "受理单取消成功!";
+			try{
+				for(String id:ids.split(",")){
+					CustomerSerEntity customerSer = systemService.getEntity(CustomerSerEntity.class,
+					id
+					);
+				    if(customerSer.getAstatus().equalsIgnoreCase("1")){    	
+					    customerSer.setAktatus("0");
+					    customerSer.setAstatus("0");
+						systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+				    }else if(customerSer.getAstatus().equalsIgnoreCase("0")){
+				    	message = "该投诉单还未确认，不能取消";				   	
+				    }else{
+				    	
+				    	message = "该投诉单正在处理，不能取消";		
+				    }
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				message = "受理单取消失败!";
+				throw new BusinessException(e.getMessage());
+			}
+			j.setMsg(message);
+			return j;
+		}
 	 
 	 
 		@RequestMapping(params = "goReturnResult")

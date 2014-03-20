@@ -96,7 +96,7 @@ public class DeptAdviceQueryController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "2");
+		cq.eq("astatus", "3");
 		cq.add();
 		this.deptAdviceQueryService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);

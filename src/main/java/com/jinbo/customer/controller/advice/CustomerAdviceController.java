@@ -27,6 +27,7 @@ import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
 import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.CustomerUserEntity;
 import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.page.advice.CustomerAdvicePage;
 import com.jinbo.customer.service.advice.CustomerAdviceServiceI;
@@ -89,8 +90,10 @@ public class CustomerAdviceController extends BaseController {
 		try{
 		//自定义追加查询条件
 		cq.addOrder("createDatetime",SortDirection.desc);
+		cq.eq("deptid", ResourceUtil.getSessionUserName().getTSDepart().getId());
 		String query_createDatetime_begin = request.getParameter("createDatetime_begin");
 		String query_createDatetime_end = request.getParameter("createDatetime_end");
+		cq.le("astatus", "3");
 		if(StringUtil.isNotEmpty(query_createDatetime_begin)){
 			
 			cq.ge("createDatetime", new SimpleDateFormat("yyyy-MM-dd").parse(query_createDatetime_begin));
@@ -150,7 +153,7 @@ public class CustomerAdviceController extends BaseController {
 				CustomerSerEntity customerAdvice = systemService.getEntity(CustomerSerEntity.class,
 				id
 				);
-				if(customerAdvice.getAorder()==null||customerAdvice.getAorder().equalsIgnoreCase("")||customerAdvice.getAorder().length()<=0){					
+				if(customerAdvice.getAstatus().equalsIgnoreCase("0")){					
 					customerAdviceService.delete(customerAdvice);
 					systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 				}else{
@@ -182,9 +185,15 @@ public class CustomerAdviceController extends BaseController {
 		try{
 			customerAdvice.setCreateDatetime(DataUtils.getDate());
 			customerAdvice.setCreateName(ResourceUtil.getSessionUserName().getUserName());
+			if(ResourceUtil.getSessionUserName().getTSDepart().getSource()!=null){				
+				CustomerUserEntity user = systemService.getEntity(CustomerUserEntity.class, ResourceUtil.getSessionUserName().getTSDepart().getSource());
+				customerAdvice.setAtel(user.getTel());
+				customerAdvice.setArealname(user.getRealname());
+			}
 			customerAdvice.setAstatus("0");
 			customerAdvice.setAinfo("0");
 			customerAdvice.setAktatus("0");
+			customerAdvice.setDeptid(ResourceUtil.getSessionUserName().getTSDepart().getId());
 			customerAdvice.setAzhtype(ResourceUtil.getSessionUserName().getUserName());
             systemService.save(customerAdvice);
             

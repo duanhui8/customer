@@ -100,7 +100,7 @@ public class DeptSerController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "1");
+		cq.eq("astatus", "2");
 		cq.add();
 		this.deptSerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);

@@ -30,7 +30,7 @@
 </script>
 <div style="padding: 3px; height: 25px;width:auto;" class="datagrid-toolbar">
 	<a id="addAdviceReplyBtn" href="#">反馈方式</a> 
-	<t:dictSelect field="dept1" type="list" divClass="backgroud:red"
+	<t:dictSelect field="returnS" type="list" divClass="backgroud:red"
 						typeGroupCode="returns" defaultVal="${customerAdvicePage.source}" hasLabel="false"  title="投诉部门">
 						</t:dictSelect>      	
 	<!-- <a id="delAdviceReplyBtn" href="#">删除</a>  -->
@@ -56,10 +56,11 @@
 					<input name="adviceReplyList[0].createName" type="hidden"/>
 					<input name="adviceReplyList[0].createDept" type="hidden"/>
 				  <td align="left">
-					       	<input name="adviceReplyList[0].acontent" maxlength="500" 
+					<!--        	<input name="adviceReplyList[0].acontent" maxlength="500" 
 						  		type="text" class="inputxt"  style="width:120px;"
 					               
-					                >
+					                > -->
+					                <textarea name="adviceReplyList[0].acontent" rows="9" cols="60"  disabled="disabled"></textarea>
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 					</td>
    			</tr>

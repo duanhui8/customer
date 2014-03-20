@@ -55,6 +55,7 @@
 			<td class="value">
 					<t:dictSelect field="atype" type="list"
 						typeGroupCode="bugtype" defaultVal="${customerAdvicePage.atype}" hasLabel="false"  title="投诉类型"></t:dictSelect>     
+			
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉类型</label>
 			</td>

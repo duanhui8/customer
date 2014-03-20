@@ -2,7 +2,7 @@ function confirms(title,url,gname) {
 	    var ids = [];
    var rows = $("#"+gname).datagrid('getSelections');
     if (rows.length > 0) {
-    	$.dialog.confirm('确认受理选中的投诉单吗?'+"共"+rows.length+"条。", function(r) {
+    	$.dialog.confirm('确认选中的投诉单吗?'+"共"+rows.length+"条。", function(r) {
 		   if (r) {
 				for ( var i = 0; i < rows.length; i++) {
 					ids.push(rows[i].id);

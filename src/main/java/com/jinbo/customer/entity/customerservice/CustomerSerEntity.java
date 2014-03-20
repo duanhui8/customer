@@ -55,6 +55,16 @@ public class CustomerSerEntity implements java.io.Serializable {
 	private java.lang.String azhtype;
 	/**公司名*/
 	private java.lang.String arealname;
+	/**公司的id*/
+	private java.lang.String deptid;
+	public java.lang.String getDeptid() {
+		return deptid;
+	}
+
+	public void setDeptid(java.lang.String deptid) {
+		this.deptid = deptid;
+	}
+
 	/**受理时间*/
 	private java.util.Date slDatetime;
 	/**受理人*/

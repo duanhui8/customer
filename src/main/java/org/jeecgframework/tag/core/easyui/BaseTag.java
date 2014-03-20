@@ -119,6 +119,14 @@ public class BaseTag extends TagSupport {
 				sb.append("<script type=\"text/javascript\" src=\"plug-in/lhgDialog/lhgdialog.min.js\"></script>");
 				sb.append("<script type=\"text/javascript\" src=\"plug-in/tools/curdtools.js\"></script>");
 				sb.append("<script type=\"text/javascript\" src=\"plug-in/tools/easyuiextend.js\"></script>");
+				sb.append("<script type=\"text/javascript\" src=\"plug-in/tools/js/highcharts.js\"></script>");
+				sb.append("<script type=\"text/javascript\" src=\"plug-in/tools/js/modules/exporting.js\"></script>");
+
+			}
+			if(oConvertUtils.isIn("highchart", types)){
+				sb.append("<script type=\"text/javascript\" src=\"plug-in/tools/js/highcharts.js\"></script>");
+				sb.append("<script type=\"text/javascript\" src=\"plug-in/tools/js/modules/exporting.js\"></script>");
+				
 			}
 			if (oConvertUtils.isIn("toptip", types)) {
 				sb.append("<link rel=\"stylesheet\" href=\"plug-in/toptip/css/css.css\" type=\"text/css\"></link>");

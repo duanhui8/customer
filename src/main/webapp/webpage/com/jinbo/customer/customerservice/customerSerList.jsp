@@ -28,6 +28,7 @@
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="查看" url="customerSerController.do?goUpdate" funname="detail"/>
    <t:dgToolBar title="受理单确认" icon="icon-edit" url="customerSerController.do?doBatchConfirm" funname="confirms" height="450"></t:dgToolBar>
+   <t:dgToolBar title="取消确认" icon="icon-edit" url="customerSerController.do?doBatchCancel" funname="confirms" height="450"></t:dgToolBar>
    <t:dgToolBar title="受理单下发"  icon="icon-remove" url="customerSerController.do?goUpdate" funname="update" height="450"></t:dgToolBar>
    <t:dgToolBar title="查看处理" icon="icon-search" url="customerSerController.do?goQuery" funname="detail" height="450"></t:dgToolBar>
    <t:dgToolBar title="受理单反馈" icon="icon-search" url="customerSerController.do?goReturnResult" funname="update" height="450"></t:dgToolBar>

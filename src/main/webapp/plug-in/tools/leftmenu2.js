@@ -96,6 +96,7 @@ function addTab(subtitle, url, icon) {
 			closable : true,
 			icon : icon
 		});
+		
 	} else {
 		$('#maintabs').tabs('select', subtitle);
 		$.messager.progress('close');
