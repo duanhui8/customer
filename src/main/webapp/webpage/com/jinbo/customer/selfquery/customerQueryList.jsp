@@ -54,7 +54,7 @@
 			<t:dgCol title="投诉部门" field="aadept" hidden="false"
 				queryMode="single" dictionary="advicedept" width="120"></t:dgCol>
 			<t:dgToolBar title="评价与查看" icon="icon-search"
-				url="customerQueryController.do?goUpdate" funname="details"
+				url="customerQueryController.do?goUpdate" funname="detailst"
 				height="450"></t:dgToolBar>
 		</t:datagrid>
 	</div>
@@ -90,7 +90,7 @@
 						});
 			});
 
-	function details(title, url, id, width, height) {
+	function detailst(title, url, id, width, height) {
 		var rowsData = $('#' + id).datagrid('getSelections');
 		//	if (rowData.id == '') {
 		//		tip('请选择查看项目');
@@ -106,10 +106,10 @@
 			return;
 		}
 		url += '&load=detail&id=' + rowsData[0].id;
-		createdetailwindow(title, url, width, height, rowsData[0].id);
+		createdetailwindowtty(title, url, width, height, rowsData[0].id);
 	}
 
-	function createdetailwindow(title, addurl, width, height, id) {
+	function createdetailwindowtty(title, addurl, width, height, id) {
 		width = width ? width : 700;
 		height = height ? height : 400;
 		if (width == "100%" || height == "100%") {
@@ -156,7 +156,7 @@
 			async : false,
 			cache : false,
 			type : 'POST',
-			url : "customerQueryController.do?doQuery&id=" + id,// 请求的action路径
+			url : "customerQueryController.do?doQueryPing&id=" + id,// 请求的action路径
 			error : function() {// 请求失败处理函数
 			},
 			success : function(data) {
@@ -177,11 +177,13 @@
 		$
 				.dialog({
 					title : "评价",
-					content : "<form id='pjtb' action='customerQueryController.do?doSaveEval' method='post'>客服评价:<input type='radio' name='kefupj' value='0'/>好评&nbsp<input type='radio' name='kefupj' value='1'/>一般<input type='radio' name='kefupj'value='2'/>差评<br><br>	结果评价:<input type='radio' name='deptpj' value='0'/>好评&nbsp<input type='radio' name='deptpj' value='1'/>一般<input type='radio' name='deptpj' value='2'/>差评<br> <br>评论:<br><textarea cols='40' rows='5' name='note'></textarea><input type='hidden' name='advice_id' value='"+id+"'/></form>",
-					ok : function() {
+					content: "<form id='pjtb' action='customerQueryController.do?doSaveEval' method='post'> 客服评价:<input type='radio' name='kefupj' value='0' />非常满意&nbsp<input type='radio' name='kefupj' value='1' />满意&nbsp<input type='radio' name='kefupj' value='1' />一般<input type='radio' name='kefupj' value='3' />较差<input type='radio' name='kefupj' value='4' />很差<br> <br> 结果评价:<input type='radio' name='deptpj' value='0' />非常满意&nbsp<input type='radio' name='deptpj' value='1' />满意&nbsp<input type='radio' name='deptpj' value='2' />一般<input type='radio' name='deptpj' value='3' />差评<input type='radio' name='deptpj' value='4' />很差<br> <br>评论:<br> <textarea cols='40' rows='5' name='note'></textarea><input type='hidden' name='advice_id' value='"+id+"'/></form>",
+					ok : function() {			
+					console.log($('#pjtb'));	
 						$('#pjtb').form('submit', {
 							url : "customerQueryController.do?doSaveEval",
 							onSubmit : function() {
+				
 							},
 							success : function(r) {
 								tip('操作成功');

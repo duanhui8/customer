@@ -43,7 +43,20 @@ public class DictSelectTag extends TagSupport {
 	private String dictField;// 自定义字典表的匹配字段-字典的编码值
 	private String dictText;// 自定义字典表的显示文本-字典的显示值
 	private String extendParams;//扩展参数
+	private String zisql;
 
+
+	public String getZisql() {
+		return zisql;
+	}
+
+	public void setZisql(String zisql) {
+		this.zisql = zisql;
+	}
+
+	public static SystemService getSystemService() {
+		return systemService;
+	}
 
 	@Autowired
 	private static SystemService systemService;
@@ -268,9 +281,13 @@ public class DictSelectTag extends TagSupport {
 	 * 
 	 * @作者：Alexander
 	 */
-	private List<Map<String, Object>> queryDic() {
+	private List<Map<String, Object>> queryDic() {		
 		String sql = "select " + dictField + " as field," + dictText
 				+ " as text from " + dictTable;
+		if(zisql!=null){
+			sql = "select " + dictField + " as field," + dictText
+					+ " as text from " + dictTable +" where 1=1 and "+zisql;
+		}
 		systemService = ApplicationContextUtil.getContext().getBean(
 				SystemService.class);
 		List<Map<String, Object>> list = systemService.findForJdbc(sql);

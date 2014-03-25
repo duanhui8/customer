@@ -95,7 +95,7 @@ public class CustomerQueryController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "3");
+		cq.eq("astatus", "4");
 		cq.add();
 		this.customerQueryService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -156,7 +156,7 @@ public class CustomerQueryController extends BaseController {
 		 * 
 		 * @return
 		 */
-		 @RequestMapping(params = "doQuery")
+		 @RequestMapping(params = "doQueryPing")
 		@ResponseBody
 		public AjaxJson doQuery(String ids,HttpServletRequest request){
 			AjaxJson j = new AjaxJson();
@@ -213,8 +213,10 @@ public class CustomerQueryController extends BaseController {
 	        ev.setNote(evaluateEntity.getNote());
 	        ev.setUserid(ResourceUtil.getSessionUserName().getId());
 	        CustomerSerEntity cus =  systemService.getEntity(CustomerSerEntity.class, evaluateEntity.getAdvice_id());
+	        ev.setKefuid(cus.getKefuid());
 	        ev.setDepid(cus.getAadept());
-	        ev.setKefuid(cus.getDeName());
+
+	   //     ev.setKefuid(cus.get);
 	        systemService.save(ev);
 			//systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
@@ -261,6 +263,16 @@ public class CustomerQueryController extends BaseController {
 			req.setAttribute("customerQueryPage", customerQuery);
 		}
 		return new ModelAndView("com/jinbo/customer/selfquery/customerQuery-add");
+	}
+	
+	/**
+	 * 查询新增页面跳转
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "goEva")
+	public ModelAndView goEva(CustomerSerEntity customerQuery, HttpServletRequest req) {
+		return new ModelAndView("com/jinbo/customer/selfquery/evaluate");
 	}
 	
 	/**

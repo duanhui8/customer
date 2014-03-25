@@ -785,6 +785,18 @@
 	                    <server>tomcat6</server>
 	                </configuration>
 	            </plugin>
+	            <!-- 热部署 -->
+	            <plugin>  
+            <groupId>org.mortbay.jetty</groupId>  
+            <artifactId>jetty-maven-plugin</artifactId>  
+            <version>8.1.1.v20120215</version>  
+            <configuration>  
+                <scanIntervalSeconds>10</scanIntervalSeconds>  
+                <webAppConfig>  
+                    <contextPath>/</contextPath>  
+                </webAppConfig>  
+            </configuration>  
+        </plugin>  
 	    </plugins>
 		<finalName>jeecg</finalName>
 		<resources>

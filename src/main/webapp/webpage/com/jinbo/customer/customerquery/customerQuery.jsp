@@ -13,9 +13,9 @@
    <t:dgCol title="客服备注"  field="anotes"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="进度"  field="astatus"  hidden="true" query="true" queryMode="single" dictionary="a_status" width="70"></t:dgCol>
    <t:dgCol title="投诉时间"  field="createDatetime" formatter="yyyy-MM-dd hh:mm:ss" hidden="true" query="true" queryMode="group"  width="120"></t:dgCol>
-   <t:dgCol title="投诉人"  field="createName"  hidden="false"  queryMode="single"  width="80"></t:dgCol>
-   <t:dgCol title="客户账号"  field="azhtype"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
-   <t:dgCol title="公司名"  field="arealname"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
+   <t:dgCol title="投诉人"  field="createName"  hidden="true"  queryMode="single"  width="80"></t:dgCol>
+   <t:dgCol title="客户账号"  field="azhtype"  hidden="true"  queryMode="single"  width="120"></t:dgCol>
+   <t:dgCol title="公司名"  field="arealname"  hidden="true"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="受理时间"  field="slDatetime"  hidden="true"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="受理人"  field="slName"  hidden="false"  queryMode="single"  width="80"></t:dgCol>
    <t:dgCol title="部门处理时间"  field="deDatetime" formatter="yyyy-MM-dd hh:mm:ss" hidden="false"  queryMode="single"  width="120"></t:dgCol>

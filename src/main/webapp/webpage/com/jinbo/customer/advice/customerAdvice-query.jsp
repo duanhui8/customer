@@ -91,7 +91,7 @@
 			</td>
 			<td class="value">
 					<t:dictSelect field="aadept" type="list"
-						typeGroupCode="advicedept" defaultVal="${customerAdvicePage.aadept}" hasLabel="false"  title="投诉部门"></t:dictSelect>     
+						 hasLabel="false" dictTable="t_s_depart" dictText="departname" dictField="id" title="投诉部门" zisql="source is null"></t:dictSelect>     
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉部门</label>
 			</td>

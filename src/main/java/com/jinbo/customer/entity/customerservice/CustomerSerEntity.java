@@ -45,6 +45,15 @@ public class CustomerSerEntity implements java.io.Serializable {
 	private java.lang.String aktatus;
 	/**客服备注*/
 	private java.lang.String anotes;
+	private java.lang.String kefuid;
+	public java.lang.String getKefuid() {
+		return kefuid;
+	}
+
+	public void setKefuid(java.lang.String kefuid) {
+		this.kefuid = kefuid;
+	}
+
 	/**进度*/
 	private java.lang.String astatus;
 	/**投诉时间*/

@@ -24,7 +24,7 @@
    <t:dgCol title="反馈人"  field="comName"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="附件"  field="afile"  hidden="false"  queryMode="single"  width="120"></t:dgCol>
    <t:dgCol title="电话"  field="atel"  hidden="false"  queryMode="single"  width="80"></t:dgCol>
-   <t:dgCol title="投诉部门"  field="aadept"  hidden="false"  queryMode="single" dictionary="advicedept" width="120"></t:dgCol>
+   <t:dgCol title="投诉部门"  field="aadept"  hidden="false"  queryMode="single" dictionary="advicedept"  width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="删除" url="customerAdviceController.do?doDel&id={id}" />
    <t:dgToolBar title="投诉" icon="icon-add" url="customerAdviceController.do?goAdd" funname="add" height="450"></t:dgToolBar>

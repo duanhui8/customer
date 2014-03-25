@@ -17,17 +17,21 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.AINFOSTATUS;
 import org.jeecgframework.core.util.DataUtils;
 import org.jeecgframework.core.util.RandomUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
+import org.jeecgframework.core.util.UpdateUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
 import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.CustomerUserEntity;
 import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
+import com.jinbo.customer.page.advice.CustomerAdvicePage;
 import com.jinbo.customer.page.customerservice.CustomerSerPage;
 import com.jinbo.customer.service.customerservice.CustomerSerServiceI;
 /**   
@@ -98,7 +102,7 @@ public class CustomerSerController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.le("astatus", "2");
+		cq.le("astatus", "3");
 		cq.add();
 		this.customerSerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -113,14 +117,19 @@ public class CustomerSerController extends BaseController {
 	@ResponseBody
 	public AjaxJson doDel(CustomerSerEntity customerSer, HttpServletRequest request) {
 		AjaxJson j = new AjaxJson();
+		if(!customerSer.getAinfo().equalsIgnoreCase("3")){
+			message = "该投诉单是用户创建,不能删除！";
+			j.setMsg(message);
+			return j;
+		}
 		customerSer = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
-		message = "客服删除成功";
+		message = "删除成功";
 		try{
 			customerSerService.delete(customerSer);
 			systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
 			e.printStackTrace();
-			message = "客服删除失败";
+			message = "删除失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -143,14 +152,19 @@ public class CustomerSerController extends BaseController {
 		message = "投诉单下发成功";
 		try{
             String note = (String) request.getParameter("note");
-            String dept = (String) request.getParameter("dept1");
+            String dept = (String) request.getParameter("aadept");
             CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
-            if(cus.getAktatus().equalsIgnoreCase("0")){
+            if(cus.getAstatus().equalsIgnoreCase("0")){
             	message = "请先确认!";
-            }else if(cus.getAktatus().equalsIgnoreCase("1")){            	
-            	cus.setAnotes(note);
+            }else if(cus.getAstatus().equalsIgnoreCase("1")){            	
+            	UpdateUtil.update(cus, customerSer);
             	cus.setAstatus("2");
-            	cus.setAadept(dept);          	
+            }else if(cus.getAstatus().equalsIgnoreCase("2")){
+            	message = "下发失败，部门正在处理!";
+            	
+            }else if(cus.getAstatus().equalsIgnoreCase("3")){
+            	
+            	message = "下发失败，请反馈结果!";
             }
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
@@ -175,7 +189,7 @@ public class CustomerSerController extends BaseController {
 				if(returnS.equalsIgnoreCase("0")){
 					message = "网页反馈结果成功";
 					CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
-					cus.setAstatus("3");
+					cus.setAstatus("4");
 					cus.setComDatetime(DataUtils.getDate());
 					cus.setComName(ResourceUtil.getSessionUserName().getUserName());
 				}else if(returnS.equalsIgnoreCase("2")){
@@ -230,6 +244,7 @@ public class CustomerSerController extends BaseController {
 	@RequestMapping(params = "goUpdate")
 	public ModelAndView goUpdate(CustomerSerEntity customerSer, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(customerSer.getId())) {
+		
 			customerSer = customerSerService.getEntity(CustomerSerEntity.class, customerSer.getId());
 			req.setAttribute("customerSerPage", customerSer);
 		}
@@ -294,7 +309,7 @@ public class CustomerSerController extends BaseController {
 		}catch(Exception e){
 			logger.info(e.getMessage());
 		}
-		return new ModelAndView("com/jinbo/customer/repyservice/adviceReplyList2");
+		return new ModelAndView("com/jinbo/customer/repyservice/adviceReplyList");
 	}
 	
 	
@@ -326,6 +341,7 @@ public class CustomerSerController extends BaseController {
 				    customerSer.setAorder(num);
 				    customerSer.setAktatus("1");
 				    customerSer.setAstatus("1");
+				    customerSer.setKefuid(ResourceUtil.getSessionUserName().getId());
 					customerSerService.updateEntitie(customerSer);
 					systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			    }else{
@@ -387,9 +403,18 @@ public class CustomerSerController extends BaseController {
 			}
 			return new ModelAndView("com/jinbo/customer/customerservice/customerSer-return");
 		}
+		@RequestMapping(params = "goReturnResult2")
+		public ModelAndView goReturnResult2(CustomerSerEntity customerSer, HttpServletRequest req) {
+			if (StringUtil.isNotEmpty(customerSer.getId())) {
+				customerSer = customerSerService.getEntity(CustomerSerEntity.class, customerSer.getId());
+				req.setAttribute("customerSerPage", customerSer);
+				System.out.println("id是"+customerSer.getId());
+			}
+			return new ModelAndView("com/jinbo/customer/customerservice/customerSer-return2");
+		}
 
 	 /**
-		 * 更新客服
+		 * 下发投诉单
 		 * 
 		 * @param ids
 		 * @return
@@ -417,4 +442,102 @@ public class CustomerSerController extends BaseController {
 			return j;
 		}
      
+		
+		
+		/**
+		 * 客服添加客户电话投诉
+		 * 
+		 * @param ids
+		 * @return
+		 */
+		@RequestMapping(params = "doAdd")
+		@ResponseBody
+		public AjaxJson doAdd(CustomerSerEntity customerAdvice,CustomerAdvicePage customerAdvicePage, HttpServletRequest request) {
+			//List<ServiceReplyEntity> adviceReplyList =  customerAdvicePage.getAdviceReplyList();
+			AjaxJson j = new AjaxJson();
+			message = "添加成功";
+			try{
+				customerAdvice.setCreateDatetime(DataUtils.getDate());
+				customerAdvice.setCreateName(ResourceUtil.getSessionUserName().getUserName());
+				//需要电话投诉的公司id
+				String deptid = customerAdvice.getDeptid();
+				TSDepart ts = systemService.getEntity(TSDepart.class, deptid);
+				if(ts!=null&&ts.getSource()!=null){					
+					CustomerUserEntity cus = systemService.getEntity(CustomerUserEntity.class, ts.getSource());
+					if(cus!=null){				
+						customerAdvice.setAtel(cus.getTel());
+						customerAdvice.setArealname(cus.getRealname());
+						
+					}
+					customerAdvice.setAstatus("0");
+					customerAdvice.setAinfo("3");
+					customerAdvice.setAktatus("0");
+					systemService.save(customerAdvice);	            
+					//	customerAdviceService.addMain(customerAdvice, adviceReplyList);
+					systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
+				}else{
+					
+					message = "该需要投诉的公司，未找不到！";
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				message = "客户投诉添加失败";
+				throw new BusinessException(e.getMessage());
+			}
+			j.setMsg(message);
+			return j;
+		}
+		
+		
+		/**
+		 * 客服修改界面跳转
+		 * 
+		 * @return
+		 */
+		@RequestMapping(params = "goUpdateK")
+		public ModelAndView goUpdateK(CustomerSerEntity customerAdvice, HttpServletRequest req) {
+			if (StringUtil.isNotEmpty(customerAdvice.getId())) {
+				customerAdvice = customerSerService.getEntity(CustomerSerEntity.class, customerAdvice.getId());
+				if(customerAdvice.getAinfo().equalsIgnoreCase(AINFOSTATUS.电话_客服录入)){
+					
+					req.setAttribute("customerSerPage", customerAdvice);
+					return new ModelAndView("com/jinbo/customer/customerservice/customerSer-updateKe");
+				}else{
+					return new ModelAndView("com/jinbo/customer/customerservice/jizhiupdate");
+				}
+			}
+			return new ModelAndView("com/jinbo/customer/customerservice/customerSer-updateKe");
+
+		}
+		/**
+		 * 客服修改自己的投诉单
+		 * 
+		 * @param ids
+		 * @return
+		 */
+		@RequestMapping(params = "doUpdatekefu")
+		@ResponseBody
+		public AjaxJson doUpdatekefu(CustomerSerEntity customerAdvice,CustomerAdvicePage customerAdvicePage, HttpServletRequest request) {
+			List<ServiceReplyEntity> adviceReplyList =  customerAdvicePage.getAdviceReplyList();
+			AjaxJson j = new AjaxJson();
+			message = "更新成功";
+			try{
+				CustomerSerEntity old = systemService.getEntity(CustomerSerEntity.class, customerAdvice.getId());
+				if(old.getAstatus().equalsIgnoreCase("0")){
+					UpdateUtil.update(old, customerAdvice);
+				    systemService.updateEntitie(old);
+					systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+					
+				}else{
+					message = "客户已受理不能修改";
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				message = "更新客户投诉失败";
+				throw new BusinessException(e.getMessage());
+			}
+			j.setMsg(message);
+			
+			return j;
+		}
 }

@@ -47,9 +47,11 @@
 				<td align="center"><div style="width: 25px;" name="xh">1</div></td>
 				<td align="center">
 				
-				<t:dictSelect field="dept1" type="list"
+			<%-- 	<t:dictSelect field="dept1" type="list"
 						typeGroupCode="advicedept" defaultVal="${customerAdvicePage.aadept}" hasLabel="false"  title="投诉部门">
-						</t:dictSelect>       
+						</t:dictSelect>     --%>   
+							<t:dictSelect field="aadept" type="list"
+						 hasLabel="false" dictTable="t_s_depart" dictText="departname" dictField="id" title="投诉部门" zisql="source is null"></t:dictSelect> 
 						
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉部门</label></td>

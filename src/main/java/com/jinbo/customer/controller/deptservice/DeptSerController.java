@@ -20,6 +20,7 @@ import org.jeecgframework.core.constant.Globals;
 import org.jeecgframework.core.util.DataUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
+import org.jeecgframework.core.util.UpdateUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
@@ -101,6 +102,7 @@ public class DeptSerController extends BaseController {
 			throw new BusinessException(e.getMessage());
 		}
 		cq.eq("astatus", "2");
+		cq.eq("aadept", ResourceUtil.getSessionUserName().getTSDepart().getId());
 		cq.add();
 		this.deptSerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -193,22 +195,29 @@ public class DeptSerController extends BaseController {
 		message = "回复成功";
 		try{
 			CustomerSerEntity dept = systemService.getEntity(CustomerSerEntity.class, deptSer.getId());
-		    dept.setAstatus("2");
-		    dept.setDeDatetime(DataUtils.getDate());
-		    dept.setDeName(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
-		    systemService.updateEntitie(dept);
-			for(ServiceReplyEntity de:deptReplyList){
-			if(de.getId()==null||de.getId().length()<=0){
-     			de.setCreateDatetime(DataUtils.getDate());
-				de.setAorder(deptSer.getAorder());
-				de.setCreateName(ResourceUtil.getSessionUserName().getUserName());
-				de.setCreateDept(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
-				deptSerService.save(de);
-			}else{
-				deptSerService.updateEntitie(de);
+		    if(dept.getAstatus().equalsIgnoreCase("2")){
+		    	 dept.setAstatus("3");
+				    dept.setDeDatetime(DataUtils.getDate());
+				    dept.setDeName(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
+				    systemService.updateEntitie(dept);
+				    ServiceReplyEntity de = new ServiceReplyEntity();
+				        de.setAcontent(request.getParameter("acontent"));
+		     			de.setCreateDatetime(DataUtils.getDate());
+						de.setAorder(dept.getAorder());
+						de.setCreateName(ResourceUtil.getSessionUserName().getUserName());
+						de.setCreateDept(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
+						deptSerService.save(de);
+					
 				
-			}
-		}
+		    }else if(dept.getAstatus().equalsIgnoreCase("3")){
+		    	for(ServiceReplyEntity de:deptReplyList){
+					if(de.getId()!=null||de.getId().length()>0){
+						ServiceReplyEntity old = systemService.getEntity(ServiceReplyEntity.class, de.getId());
+						UpdateUtil.update(old, de);
+						systemService.updateEntitie(old);
+					}
+					}
+		    }
 		   
 	//		String adviceId = deptSer.getId();
 //			ServiceReplyEntity dereply = new ServiceReplyEntity();
@@ -248,9 +257,21 @@ public class DeptSerController extends BaseController {
 			deptSer = deptSerService.getEntity(CustomerSerEntity.class, deptSer.getId());
 			req.setAttribute("deptSerPage", deptSer);
 		}
+		return new ModelAndView("com/jinbo/customer/deptreply/deptReplyList");
+	}
+	/**
+	 * 客户投诉编辑页面跳转
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "goQuery")
+	public ModelAndView goQuery(CustomerSerEntity deptSer, HttpServletRequest req) {
+		if (StringUtil.isNotEmpty(deptSer.getId())) {
+			deptSer = deptSerService.getEntity(CustomerSerEntity.class, deptSer.getId());
+			req.setAttribute("deptSerPage", deptSer);
+		}
 		return new ModelAndView("com/jinbo/customer/deptservice/deptSer-update");
 	}
-	
 	
 	/**
 	 * 加载明细列表[部门回复]
@@ -272,7 +293,7 @@ public class DeptSerController extends BaseController {
 		}catch(Exception e){
 			logger.info(e.getMessage());
 		}
-		return new ModelAndView("com/jinbo/customer/deptreply/deptReplyList");
+		return new ModelAndView("com/jinbo/customer/deptreply/deptReplyList2");
 	}
 	
 }

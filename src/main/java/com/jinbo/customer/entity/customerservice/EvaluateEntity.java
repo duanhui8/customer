@@ -72,7 +72,7 @@ public class EvaluateEntity implements java.io.Serializable {
 	/**地址*/
 	private java.lang.String note3;
 	/**QQ*/
-	
+
 	/**创建时间*/
 	private java.util.Date createDatetime;
 	/**创建人*/

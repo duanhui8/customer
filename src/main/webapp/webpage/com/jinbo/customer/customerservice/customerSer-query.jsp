@@ -19,7 +19,7 @@
  </script>
  </head>
  <body style="overflow-x: hidden;">
-  <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" tiptype="1" action="customerSerController.do?doUpdate">
+  <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" tiptype="1" action="#">
 					<input id="id" name="id" type="hidden" value="${customerSerPage.id }">
 					<input id="aorder" name="aorder" type="hidden" value="${customerSerPage.aorder }">
 					<input id="ainfo" name="ainfo" type="hidden" value="${customerSerPage.ainfo }">
@@ -91,7 +91,7 @@
 			</td>
 			<td class="value">
 					<t:dictSelect field="aadept" type="list"
-						typeGroupCode="advicedept" defaultVal="${customerSerPage.aadept}" hasLabel="false"  title="投诉部门"></t:dictSelect>     
+						 hasLabel="false" dictTable="t_s_depart" dictText="departname" dictField="id" title="投诉部门" zisql="source is null"></t:dictSelect>     
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉部门</label>
 			</td>
@@ -113,9 +113,7 @@
 			 <td align="center"><input style="width:20px;" type="checkbox" name="ck"/></td>
 				  <td align="left">
 					       	<input name="adviceReplyList[#index#].acontent" maxlength="500" 
-						  		type="text" class="inputxt"  style="width:120px;"
-					               
-					               >
+						  		type="text" class="inputxt"  style="width:120px;" >
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 				  </td>
 			</tr>

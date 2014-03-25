@@ -44,7 +44,7 @@
 			</td>
 			<td class="value">
 		     	 <input id="atitle" name="atitle" type="text" style="width: 150px" class="inputxt"  
-					               
+					       datatype="*"        
 					               >
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉标题</label>
@@ -65,7 +65,7 @@
 			</td>
 			<td class="value">
 					<t:dictSelect field="aadept" type="list"
-						typeGroupCode="advicedept"  hasLabel="false"  title="投诉部门"></t:dictSelect>     
+						 hasLabel="false" dictTable="t_s_depart" dictText="departname" dictField="id" title="投诉部门" zisql="source is null"></t:dictSelect>     
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉部门</label>
 			</td>
@@ -86,7 +86,7 @@
 				<label class="Validform_label">投诉内容:</label>
 			</td>
 			<td class="value" colspan="3">
-				 <textarea id="acontent" name="acontent" style="width:500px;height:150px"></textarea>
+				 <textarea id="acontent" name="acontent" style="width:500px;height:150px" datatype="*"></textarea>
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉内容</label>
 			</td>

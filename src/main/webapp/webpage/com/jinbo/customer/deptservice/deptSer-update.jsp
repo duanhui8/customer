@@ -4,9 +4,8 @@
 <html>
  <head>
   <title>客户投诉</title>
-  <t:base type="jquery,easyui,tools,DatePicker"></t:base>
-  <script type="text/javascript" src="plug-in/ckeditor_new/ckeditor.js"></script>
-  <script type="text/javascript" src="plug-in/ckfinder/ckfinder.js"></script>
+<t:base type="ckfinder,ckeditor,jquery,easyui,tools,DatePicker"></t:base>
+<link rel="stylesheet" type="text/css" href="plug-in/jquery-ui/css/ui-lightness/jquery-ui-1.9.2.custom.min.css">
   <script type="text/javascript">
   $(document).ready(function(){
 	$('#tt').tabs({

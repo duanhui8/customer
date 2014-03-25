@@ -1,5 +1,8 @@
 package com.jinbo.customer.controller.deptadvicequery;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +20,7 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
@@ -24,6 +28,7 @@ import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
 import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.EvaluateEntity;
 import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.page.deptadvicequery.DeptAdviceQueryPage;
 import com.jinbo.customer.service.deptadvicequery.DeptAdviceQueryServiceI;
@@ -93,10 +98,11 @@ public class DeptAdviceQueryController extends BaseController {
 		if(StringUtil.isNotEmpty(query_createDatetime_end)){
 			cq.le("createDatetime", new SimpleDateFormat("yyyy-MM-dd").parse(query_createDatetime_end));
 		}
-		}catch (Exception e) {
+		}catch (Exception e){
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "3");
+		cq.ge  ("astatus", "3");
+		cq.eq("aadept", ResourceUtil.getSessionUserName().getTSDepart().getId());
 		cq.add();
 		this.deptAdviceQueryService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -227,6 +233,59 @@ public class DeptAdviceQueryController extends BaseController {
 		return new ModelAndView("com/jinbo/customer/deptadvicequery/deptAdviceQuery-update");
 	}
 	
+	
+	
+
+	
+	/**
+	 * 评价
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "goEvaluate")
+	public ModelAndView goEvaluate(CustomerSerEntity customerQueryController, HttpServletRequest req) {
+	    	DecimalFormat df = new DecimalFormat("0.00");		
+			Long con = systemService.getCountForJdbc("select count(deptpj) from evaluate where depid ='"+ResourceUtil.getSessionUserName().getTSDepart().getId()+"'");
+			double feichang = 0,manyi=0,yiban=0,jiaocha=0,hencha=0;
+		    if(con!=null&&con!=0){
+		    	List<EvaluateEntity> lists = systemService.findHql("FROM EvaluateEntity e WHERE e.depid =?",ResourceUtil.getSessionUserName().getTSDepart().getId());
+				for(EvaluateEntity en : lists){
+	            	String pj = en.getDeptpj();
+	            	if(pj.equalsIgnoreCase("0")){
+	            		feichang++;
+	            	}else if(pj.equalsIgnoreCase("1")){           
+	            		manyi++;
+	            		
+	            	}else if(pj.equalsIgnoreCase("2")){
+	            		yiban++;
+	            		
+	            	}else if(pj.equalsIgnoreCase("3")){
+	            		jiaocha++;
+	            		
+	            	}else if(pj.equalsIgnoreCase("4")){
+	            		hencha++;
+	            	}
+	            }
+				double cont  = con;
+				Map<String,Double> msp = new HashMap<String, Double>();
+				msp.put("feichang", Double.parseDouble(df.format(feichang/cont))*100);
+				msp.put("manyi", Double.parseDouble(df.format(manyi/cont))*100);
+				msp.put("yiban", Double.parseDouble(df.format(yiban/cont))*100);
+				System.out.println(df.format(yiban/cont));
+				msp.put("jiaocha", Double.parseDouble(df.format(jiaocha/cont))*100);
+				msp.put("hencha",Double.parseDouble(df.format(hencha/cont))*100);
+				req.setAttribute("ping", msp);
+		    }else{
+		    	return new ModelAndView("com/jinbo/customer/customerquery/nulleva");
+		    }
+			
+			
+			/*			customerQueryController = customerQueryControllerService.getEntity(CustomerSerEntity.class, customerQueryController.getId());
+			 */
+		
+		return new ModelAndView("com/jinbo/customer/deptadvicequery/deptevaluate");
+	}
+			
 	
 	/**
 	 * 加载明细列表[回复]

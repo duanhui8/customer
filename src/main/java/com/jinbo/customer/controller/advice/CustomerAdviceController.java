@@ -20,6 +20,7 @@ import org.jeecgframework.core.constant.Globals;
 import org.jeecgframework.core.util.DataUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
+import org.jeecgframework.core.util.UpdateUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.tag.vo.datatable.SortDirection;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
@@ -84,6 +85,7 @@ public class CustomerAdviceController extends BaseController {
 
 	@RequestMapping(params = "datagrid")
 	public void datagrid(CustomerSerEntity customerAdvice,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+	    System.out.println("查询李表");
 		CriteriaQuery cq = new CriteriaQuery(CustomerSerEntity.class, dataGrid);
 		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, customerAdvice);
@@ -220,14 +222,22 @@ public class CustomerAdviceController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "更新成功";
 		try{
-			customerAdviceService.updateMain(customerAdvice, adviceReplyList);
-			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+			CustomerSerEntity old = systemService.getEntity(CustomerSerEntity.class, customerAdvice.getId());
+			if(old.getAstatus().equalsIgnoreCase("0")){
+				UpdateUtil.update(old, customerAdvice);
+			    systemService.updateEntitie(old);
+				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+				
+			}else{
+				message = "客户已受理不能修改";
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 			message = "更新客户投诉失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
+		
 		return j;
 	}
 

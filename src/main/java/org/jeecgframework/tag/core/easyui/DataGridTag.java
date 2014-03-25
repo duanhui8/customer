@@ -80,6 +80,8 @@ public class DataGridTag extends TagSupport {
 	private String rowStyler;//rowStyler函数
 	private String extendParams;//扩展参数,easyui有的,但是jeecg没有的参数进行扩展
 	private boolean autoLoadData=true; // 列表是否自动加载数据
+
+
 	//private boolean frozenColumn=false; // 是否是冰冻列    默认不是
 	//json转换中的系统保留字
 	protected static Map<String,String> syscode = new HashMap<String,String>();
@@ -296,7 +298,7 @@ public class DataGridTag extends TagSupport {
 			}
 		}
 		if (replace != null) {
-			String[] test = replace.split(",");
+		String[] test = replace.split(",");
 			String text = "";
 			String value = "";
 			for (String string : test) {
@@ -306,6 +308,7 @@ public class DataGridTag extends TagSupport {
 			setColumn(field, text, value);
 
 		}
+	
 		if (!StringUtils.isBlank(dictionary)) {
 			if(dictionary.contains(",")){
 				String[] dic = dictionary.split(",");
@@ -897,8 +900,26 @@ public class DataGridTag extends TagSupport {
 	protected void getFun(StringBuffer sb, DataGridColumn column) {
 		String url = column.getUrl();
 		url = formatUrl(url);
+
+		sb.append("if(value!=''&&value.length>0){" +
+		         " var v =value.lastIndexOf('.',value.length);" +
+		         " v = value.substr(v+1);");
+		 //-----如果是空的-----
+
+		    //----如果是图片
+		sb.append("if(v.toLowerCase()=='jpg'||v.toLowerCase()=='gif'){"); 
 		sb.append("var href=\"<a style=\'color:red\' href=\'#\' onclick=" + column.getFunname() + "('" + column.getTitle() + "','" + url + "')>\";");
-		sb.append("return href+value+\'</a>\';");
+		sb.append("return href+'预览'+\'</a>\';");		
+		 sb.append("}");
+		 sb.append("else{");
+			sb.append("var href=\"<a style=\'color:red\' href=\'#\' onclick=" + column.getFunname() + "('" + column.getTitle() + "','" + url + "')>\";");
+			sb.append("return href+'下载'+\'</a>\';");	
+		 sb.append("}");
+		//-----图片结尾----
+		
+		sb.append("}");
+		
+		
 
 	}
 

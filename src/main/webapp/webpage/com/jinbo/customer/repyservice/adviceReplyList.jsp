@@ -80,7 +80,7 @@
 						  		type="text" class="inputxt"  style="width:120px;"
 					               
 					                value="${poVal.acontent }"> --%>
-					               <textarea name="adviceReplyList[${stuts.index }].acontent" disabled="disabled" rows="9" cols="60" >${poVal.acontent }</textarea>
+					               <textarea name="adviceReplyList[${stuts.index }].acontent" disabled="disabled" rows="9" cols="60" >${poVal.acontent}</textarea>
 					  <label class="Validform_label" style="display: none;">处理结果</label>
 				   </td>
    			</tr>

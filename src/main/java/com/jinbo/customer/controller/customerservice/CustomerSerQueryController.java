@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +22,12 @@ import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.common.model.json.Highchart;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.service.SystemService;
 import com.jinbo.customer.entity.customerservice.CustomerSerEntity;
+import com.jinbo.customer.entity.customerservice.EvaluateEntity;
 import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.service.customerservice.CustomerSerServiceI;
 /**   
@@ -79,6 +82,7 @@ public class CustomerSerQueryController extends BaseController {
 
 	@RequestMapping(params = "datagrid")
 	public void datagrid(CustomerSerEntity customerQueryController,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+		System.out.println("进入查询列表");
 		CriteriaQuery cq = new CriteriaQuery(CustomerSerEntity.class, dataGrid);
 		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, customerQueryController);
@@ -95,7 +99,8 @@ public class CustomerSerQueryController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "3");
+		cq.eq("astatus", "4");
+		cq.eq("slName", ResourceUtil.getSessionUserName().getUserName());
 		cq.add();
 		this.customerQueryControllerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -219,51 +224,49 @@ public class CustomerSerQueryController extends BaseController {
 	 */
 	@RequestMapping(params = "goEvaluate")
 	public ModelAndView goEvaluate(CustomerSerEntity customerQueryController, HttpServletRequest req) {
-		if (StringUtil.isNotEmpty(customerQueryController.getId())) {
-/*			customerQueryController = customerQueryControllerService.getEntity(CustomerSerEntity.class, customerQueryController.getId());
-			req.setAttribute("customerQueryControllerPage", customerQueryController);*/
-		}
+	    	DecimalFormat df = new DecimalFormat("0.00");		
+			Long con = systemService.getCountForJdbc("select count(kefupj) from evaluate where kefuid ='"+ResourceUtil.getSessionUserName().getId()+"'");
+			double feichang = 0,manyi=0,yiban=0,jiaocha=0,hencha=0;
+		    if(con!=null&&con!=0){
+		    	List<EvaluateEntity> lists = systemService.findHql("FROM EvaluateEntity e WHERE e.kefuid =?",ResourceUtil.getSessionUserName().getId());
+				for(EvaluateEntity en : lists){
+	            	String pj = en.getKefupj();
+	            	if(pj.equalsIgnoreCase("0")){
+	            		feichang++;
+	            	}else if(pj.equalsIgnoreCase("1")){           
+	            		manyi++;
+	            		
+	            	}else if(pj.equalsIgnoreCase("2")){
+	            		yiban++;
+	            		
+	            	}else if(pj.equalsIgnoreCase("3")){
+	            		jiaocha++;
+	            		
+	            	}else if(pj.equalsIgnoreCase("4")){
+	            		hencha++;
+	            	}
+	            }
+				double cont  = con;
+				Map<String,Double> msp = new HashMap<String, Double>();
+				msp.put("feichang", Double.parseDouble(df.format(feichang/cont))*100);
+				msp.put("manyi", Double.parseDouble(df.format(manyi/cont))*100);
+				msp.put("yiban", Double.parseDouble(df.format(yiban/cont))*100);
+				msp.put("jiaocha", Double.parseDouble(df.format(jiaocha/cont))*100);
+				msp.put("hencha",Double.parseDouble(df.format(hencha/cont))*100);
+				req.setAttribute("ping", msp);
+		    }else{
+		    	return new ModelAndView("com/jinbo/customer/customerquery/nulleva");
+		    }
+			
+			
+			/*			customerQueryController = customerQueryControllerService.getEntity(CustomerSerEntity.class, customerQueryController.getId());
+			 */
+		
 		return new ModelAndView("com/jinbo/customer/customerquery/myevaluate");
 	}
+			
 	
-	/**
-	 * 报表数据生成
-	 * 
-	 * @return
-	 */
-	@RequestMapping(params = "getBroswerBar")
-	@ResponseBody
-	public List<Highchart> getBroswerBar(HttpServletRequest request,String reportType, HttpServletResponse response) {
-		List<Highchart> list = new ArrayList<Highchart>();
-		Highchart hc = new Highchart();
-		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT broswer ,count(broswer) FROM TSLog group by broswer");
-		List userBroswerList = systemService.findByQueryString(sb.toString());
-		Long count = systemService.getCountForJdbc("SELECT COUNT(1) FROM T_S_Log WHERE 1=1");
-		List lt = new ArrayList();
-		hc = new Highchart();
-		hc.setName("用户浏览器统计分析");
-		hc.setType(reportType);
-		Map<String, Object> map;
-		if (userBroswerList.size() > 0) {
-			for (Object object : userBroswerList) {
-				map = new HashMap<String, Object>();
-				Object[] obj = (Object[]) object;
-				map.put("name", obj[0]);
-				map.put("y", obj[1]);
-				Long groupCount = (Long) obj[1];
-				Double  percentage = 0.0;
-				if (count != null && count.intValue() != 0) {
-					percentage = new Double(groupCount)/count;
-				}
-				map.put("percentage", percentage*100);
-				lt.add(map);
-			}
-		}
-		hc.setData(lt);
-		list.add(hc);
-		return list;
-	}
+	
 	/**
 	 * 客服查询编辑页面跳转
 	 * 

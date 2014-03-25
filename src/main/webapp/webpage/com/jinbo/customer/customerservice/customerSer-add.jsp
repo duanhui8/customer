@@ -60,13 +60,16 @@
 			</td>
 		</tr>
 		<tr>
-			<td align="right">
-				<label class="Validform_label">投诉内容:</label>
+	
+				<td align="right">
+				<label class="Validform_label">投诉来源:</label>
 			</td>
 			<td class="value">
-				 <textarea id="acontent" name="acontent"></textarea>
+					<t:dictSelect field="ainfo" type="list" divClass="backgroud:red"
+						typeGroupCode="adsource" defaultVal="3" hasLabel="false"  title="投诉来源" >
+						</t:dictSelect>
 				<span class="Validform_checktip"></span>
-				<label class="Validform_label" style="display: none;">投诉内容</label>
+				<label class="Validform_label" style="display: none;">投诉部门</label>
 			</td>
 			<td align="right">
 				<label class="Validform_label">附件:</label>
@@ -85,8 +88,10 @@
 				<label class="Validform_label">投诉公司:</label>
 			</td>
 			<td class="value">
-					<t:dictSelect field="aadept" type="list"
-						typeGroupCode="advicedept"  hasLabel="false"  title="投诉部门"></t:dictSelect>     
+					<%-- <%-- <t:dictSelect field="aadept" type="list"
+						typeGroupCode="advicedept"  hasLabel="false"  title="投诉部门"></t:dictSelect>      --%> 
+							<t:dictSelect field="deptid" type="list"
+						 hasLabel="false" dictTable="t_s_depart" dictText="departname" dictField="id" title="投诉部门" zisql="source is not null"></t:dictSelect> 
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉</label>
 			</td>
@@ -95,9 +100,19 @@
 			</td>
 			<td class="value">
 					<t:dictSelect field="aadept" type="list"
-						typeGroupCode="advicedept"  hasLabel="false"  title="投诉部门"></t:dictSelect>     
+						 hasLabel="false" dictTable="t_s_depart" dictText="departname" dictField="id" title="投诉部门" zisql="source is null"></t:dictSelect>   
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉部门</label>
+			</td>
+		</tr>
+		<tr>
+				<td align="right">
+				<label class="Validform_label">投诉内容:</label>
+			</td>
+			<td class="value" colspan="3">
+				 <textarea id="acontent" name="acontent" style="width:500px;height:150px"></textarea>
+				<span class="Validform_checktip"></span>
+				<label class="Validform_label" style="display: none;">投诉内容</label>
 			</td>
 		</tr>
 	</table>
@@ -106,3 +121,8 @@
 	
  </body>
  <script src = "webpage/com/jinbo/customer/customerservice/customerSer.js"></script>	
+ <script  type="text/javascript">
+ $(function(){
+  $("select[name='ainfo']").attr("disabled","disabled");
+ })
+ </script>

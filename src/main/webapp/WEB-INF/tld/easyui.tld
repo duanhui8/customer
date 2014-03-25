@@ -214,8 +214,10 @@
 		<attribute>
 			<name>formatter</name>
 			<rtexprvalue>true</rtexprvalue>
-			<description>自定义函数名称</description>
+			<description>自定义格式化时间</description>
 		</attribute>
+		
+
 		<attribute>
 			<name>hidden</name>
 			<rtexprvalue>true</rtexprvalue>
@@ -1267,6 +1269,11 @@
 			<name>dictText</name>
 			<rtexprvalue>true</rtexprvalue>
 			<description>自定义字典表的显示文本-字典的显示值</description>
+		</attribute>
+			<attribute>
+			<name>zisql</name>
+			<rtexprvalue>false</rtexprvalue>
+			<description>自定义sql条件</description>
 		</attribute>
 	</tag>
 	<!-- 按钮权限标签 -->
