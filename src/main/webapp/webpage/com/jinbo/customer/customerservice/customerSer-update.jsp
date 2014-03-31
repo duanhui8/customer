@@ -24,7 +24,6 @@
 					<input id="aorder" name="aorder" type="hidden" value="${customerSerPage.aorder }">
 					<input id="ainfo" name="ainfo" type="hidden" value="${customerSerPage.ainfo }">
 					<input id="aktatus" name="aktatus" type="hidden" value="${customerSerPage.aktatus }">
-					<input id="anotes" name="anotes" type="hidden" value="${customerSerPage.anotes }">
 					<input id="astatus" name="astatus" type="hidden" value="${customerSerPage.astatus }">
 					<input id="createDatetime" name="createDatetime" type="hidden" value="${customerSerPage.createDatetime }">
 					<input id="createName" name="createName" type="hidden" value="${customerSerPage.createName }">

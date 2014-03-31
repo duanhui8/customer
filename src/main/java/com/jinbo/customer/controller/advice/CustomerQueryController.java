@@ -17,6 +17,7 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ADVICESTATUS;
 import org.jeecgframework.core.util.DataUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
@@ -95,7 +96,7 @@ public class CustomerQueryController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "4");
+		cq.eq("astatus", ADVICESTATUS.已完成);
 		cq.add();
 		this.customerQueryService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);

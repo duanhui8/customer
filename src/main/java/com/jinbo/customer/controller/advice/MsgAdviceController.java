@@ -69,7 +69,20 @@ public class MsgAdviceController extends BaseController {
 		return new ModelAndView("com/jinbo/customer/advice/msgAdvice");
 	}
 
-
-
+	/**
+	 * 循环每2分钟接收一次短信
+	 * 
+	 * @return
+	 */
+	/**
+	 * 新线程保持心跳
+	 * 
+	 * @return
+	 */
+	/**
+	 * 保存登录的信息
+	 * 
+	 * @return
+	 */
 
 }

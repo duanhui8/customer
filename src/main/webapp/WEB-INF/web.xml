@@ -12,6 +12,7 @@
 		<param-name>log4jConfigLocation</param-name>
 		<param-value>classpath:log4j.properties</param-value>
 	</context-param>
+
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -19,6 +20,9 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring-*.xml</param-value>
 	</context-param>
+	<listener>
+	<listener-class>org.jeecgframework.core.interceptors.MsgInterfaceListener</listener-class>
+	</listener>
 	<filter>
 		<filter-name>openSessionInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>

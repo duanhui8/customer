@@ -26,6 +26,14 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	private String browser;// 用户使用浏览器类型
 	private String userKey;// 用户验证唯一标示
 	private String password;//用户密码
+	private String idCard;//新添加身份证
+	public String getIdCard() {
+		return idCard;
+	}
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
+	}
+
 	private Short activitiSync;//是否同步工作流引擎
 	private Short status;// 状态1：在线,2：离线,0：禁用
 	private byte[] signature;// 签名文件

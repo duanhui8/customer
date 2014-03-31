@@ -17,6 +17,7 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ADVICESTATUS;
 import org.jeecgframework.core.util.DataUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
@@ -95,7 +96,7 @@ public class CustomerAdviceController extends BaseController {
 		cq.eq("deptid", ResourceUtil.getSessionUserName().getTSDepart().getId());
 		String query_createDatetime_begin = request.getParameter("createDatetime_begin");
 		String query_createDatetime_end = request.getParameter("createDatetime_end");
-		cq.le("astatus", "3");
+		cq.le("astatus", ADVICESTATUS.等待反馈结果);
 		if(StringUtil.isNotEmpty(query_createDatetime_begin)){
 			
 			cq.ge("createDatetime", new SimpleDateFormat("yyyy-MM-dd").parse(query_createDatetime_begin));

@@ -1,0 +1,28 @@
+@charset "utf-8";
+body { margin:0; padding:0; font-size:16px; font-weight: normal; line-height: 1.4em; font-family: Arial, "微软雅黑"; }
+div, form, img, ul, ol, li, dl, dt, dd, table, td, p { margin:0; padding:0; border:0; }
+li { list-style-type:none; padding:0; line-height:20px; }
+h1, h2, h3, h4, h5, h6 { margin:0; padding:0; font-size:12px; font-weight:normal; }
+@media screen and (max-device-width: 320px) {body {-webkit-text-size-adjust:none}}
+@media screen and (max-device-width: 480px) {body {-webkit-text-size-adjust:none}}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {body {-webkit-text-size-adjust:none}}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {body {-webkit-text-size-adjust:none}}
+.title { line-height:20px; font-weight: normal;  no-repeat 8px center; border-bottom: 1px solid #fbba4c; padding: 3px 7px 3px 18px; }
+
+.con ul li { float: left; display: block; margin-right: 6px; background: #D5D5D5; font-size: 16px; margin-bottom: 4px; padding-right: 2px; padding-left: 2px; line-height: 20px; height: 20px; }
+.con dd.ques { display: block; background: #C7DFF3; padding-left: 3px; margin-top: 2px; margin-bottom: 2px; padding-top: 2px; }
+
+/*公用*/
+.clear { clear:both; font-size:0px; height:0px; }
+.button { border:none; background:url(images/button.png) no-repeat; text-align: center; padding: 0px; line-height: 26px; height: 26px; width: 43px; font-size: 16px; }
+.btn5 { border:none; height:26px; width:85px; background:url(images/btn5.png) no-repeat; font-size: 14px; line-height: 26px; text-align: center; padding: 0px; margin: 3px 0px 0px; }
+.line_liebiao { border-bottom:1px dashed #B3B3B3; ; margin-top: 4px; margin-bottom: 4px; }
+.sinput80 { width: 80px; height: 25px;}
+.inputfontgray { line-height: 18px; height: 18px; width: 80px; margin: 0px; padding: 0px; color: #666666; }
+.title { line-height:20px; font-weight: normal;  no-repeat 8px center; border-bottom: 1px solid #fbba4c; padding: 3px 7px 3px 18px; }
+.con { height:auto; padding: 4px 7px; }
+
+.bog{
+background-color: #EFEFEF;
+}
+.fontbla { color:#282828;}

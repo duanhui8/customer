@@ -20,6 +20,7 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ADVICESTATUS;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
@@ -101,8 +102,9 @@ public class DeptAdviceQueryController extends BaseController {
 		}catch (Exception e){
 			throw new BusinessException(e.getMessage());
 		}
-		cq.ge  ("astatus", "3");
-		cq.eq("aadept", ResourceUtil.getSessionUserName().getTSDepart().getId());
+		//修改让所有人都能访问
+        //	cq.ge  ("astatus", ADVICESTATUS.已完成);
+		//cq.eq("aadept", ResourceUtil.getSessionUserName().getTSDepart().getId());
 		cq.add();
 		this.deptAdviceQueryService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -251,19 +253,21 @@ public class DeptAdviceQueryController extends BaseController {
 		    	List<EvaluateEntity> lists = systemService.findHql("FROM EvaluateEntity e WHERE e.depid =?",ResourceUtil.getSessionUserName().getTSDepart().getId());
 				for(EvaluateEntity en : lists){
 	            	String pj = en.getDeptpj();
-	            	if(pj.equalsIgnoreCase("0")){
-	            		feichang++;
-	            	}else if(pj.equalsIgnoreCase("1")){           
-	            		manyi++;
-	            		
-	            	}else if(pj.equalsIgnoreCase("2")){
-	            		yiban++;
-	            		
-	            	}else if(pj.equalsIgnoreCase("3")){
-	            		jiaocha++;
-	            		
-	            	}else if(pj.equalsIgnoreCase("4")){
-	            		hencha++;
+	            	if(pj!=null&&pj.length()>0){
+	            		if(pj.equalsIgnoreCase("0")){
+		            		feichang++;
+		            	}else if(pj.equalsIgnoreCase("1")){           
+		            		manyi++;
+		            		
+		            	}else if(pj.equalsIgnoreCase("2")){
+		            		yiban++;
+		            		
+		            	}else if(pj.equalsIgnoreCase("3")){
+		            		jiaocha++;
+		            		
+		            	}else if(pj.equalsIgnoreCase("4")){
+		            		hencha++;
+		            	}
 	            	}
 	            }
 				double cont  = con;

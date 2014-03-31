@@ -29,7 +29,8 @@
    <t:dgDelOpt title="删除" url="deptSerController.do?doDel&id={id}" />
  <%--   <t:dgToolBar title="处理" icon="icon-add" url="deptSerController.do?goAdd" funname="add" height="450"></t:dgToolBar> --%>
    <t:dgToolBar title="处理" icon="icon-edit" url="deptSerController.do?goUpdate" funname="update" height="450"></t:dgToolBar>
- <%--   <t:dgToolBar title="批量删除"  icon="icon-remove" url="deptSerController.do?doBatchDel" funname="deleteALLSelect"></t:dgToolBar> --%>
+<%--    <t:dgToolBar title="修改" icon="icon-edit" url="deptSerController.do?goUpdate" funname="update" height="450"></t:dgToolBar>
+ --%> <%--   <t:dgToolBar title="批量删除"  icon="icon-remove" url="deptSerController.do?doBatchDel" funname="deleteALLSelect"></t:dgToolBar> --%>
    <t:dgToolBar title="查看" icon="icon-search" url="deptSerController.do?goQuery" funname="detail" height="450"></t:dgToolBar>
   </t:datagrid>
   </div>

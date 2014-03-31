@@ -908,12 +908,12 @@ public class DataGridTag extends TagSupport {
 
 		    //----如果是图片
 		sb.append("if(v.toLowerCase()=='jpg'||v.toLowerCase()=='gif'){"); 
-		sb.append("var href=\"<a style=\'color:red\' href=\'#\' onclick=" + column.getFunname() + "('" + column.getTitle() + "','" + url + "')>\";");
-		sb.append("return href+'预览'+\'</a>\';");		
+		sb.append("var href=\"<a style=\'color:red\' href=\'#\' onclick=downFile('\"+value+\"') >\";");  
+		sb.append("return href+'图片预览'+\'</a>\';");		
 		 sb.append("}");
 		 sb.append("else{");
-			sb.append("var href=\"<a style=\'color:red\' href=\'#\' onclick=" + column.getFunname() + "('" + column.getTitle() + "','" + url + "')>\";");
-			sb.append("return href+'下载'+\'</a>\';");	
+			sb.append("var href=\"<a style=\'color:red\' href=\'#\' onclick=downFile('\"+value+\"')>\";");
+			sb.append("return href+'附件预览'+\'</a>\';");	
 		 sb.append("}");
 		//-----图片结尾----
 		

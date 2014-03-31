@@ -42,7 +42,7 @@ public class CustomerUserEntity implements java.io.Serializable {
 	@Excel(exportName="公司名",orderNum="2",needMerge=true)
 	private java.lang.String realname;
 
-
+    private java.lang.String linkman;
 
 	/**密码*/
 	private java.lang.String passwd;
@@ -53,6 +53,14 @@ public class CustomerUserEntity implements java.io.Serializable {
 	/**电话*/
 	@Excel(exportName="电话",orderNum="3",needMerge=true)
 	private java.lang.String tel;
+	public java.lang.String getLinkman() {
+		return linkman;
+	}
+
+	public void setLinkman(java.lang.String linkman) {
+		this.linkman = linkman;
+	}
+
 	/**地址*/
 	@Excel(exportName="地址",orderNum="4",needMerge=true)
 	private java.lang.String address;

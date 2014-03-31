@@ -1,5 +1,8 @@
 package com.jinbo.customer.controller.customerservice;
 import java.util.List;
+import java.util.Properties;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,13 +20,18 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ADVICESTATUS;
 import org.jeecgframework.core.util.AINFOSTATUS;
 import org.jeecgframework.core.util.DataUtils;
+import org.jeecgframework.core.util.MessageUtil;
+import org.jeecgframework.core.util.PropertiesUtil;
 import org.jeecgframework.core.util.RandomUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.core.util.UpdateUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
+import org.jeecgframework.web.demo.entity.test.JeecgDemoCkfinderEntity;
+import org.jeecgframework.web.system.pojo.base.Message;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
@@ -34,6 +42,7 @@ import com.jinbo.customer.entity.customerservice.ServiceReplyEntity;
 import com.jinbo.customer.page.advice.CustomerAdvicePage;
 import com.jinbo.customer.page.customerservice.CustomerSerPage;
 import com.jinbo.customer.service.customerservice.CustomerSerServiceI;
+import com.jinbo.customer.wei.utils.HTMLSpirit;
 /**   
  * @Title: Controller
  * @Description: 客服
@@ -102,7 +111,7 @@ public class CustomerSerController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.le("astatus", "3");
+		cq.le("astatus", ADVICESTATUS.等待反馈结果);
 		cq.add();
 		this.customerSerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -151,18 +160,19 @@ public class CustomerSerController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "投诉单下发成功";
 		try{
-            String note = (String) request.getParameter("note");
+            String note = (String) request.getParameter("anotes");
             String dept = (String) request.getParameter("aadept");
             CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
-            if(cus.getAstatus().equalsIgnoreCase("0")){
+            if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待客服确认)){
             	message = "请先确认!";
-            }else if(cus.getAstatus().equalsIgnoreCase("1")){            	
+            }else if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待客服下发)){             	
             	UpdateUtil.update(cus, customerSer);
+            	//cus.setAnotes(note);
             	cus.setAstatus("2");
-            }else if(cus.getAstatus().equalsIgnoreCase("2")){
+            }else if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待部门处理)){
             	message = "下发失败，部门正在处理!";
             	
-            }else if(cus.getAstatus().equalsIgnoreCase("3")){
+            }else if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待反馈结果)){
             	
             	message = "下发失败，请反馈结果!";
             }
@@ -170,6 +180,44 @@ public class CustomerSerController extends BaseController {
 		}catch(Exception e){
 			e.printStackTrace();
 			message = "投诉单下发失败";
+			throw new BusinessException(e.getMessage());
+		}
+		j.setMsg(message);
+		return j;
+	}
+	
+	
+	/**
+	 * 取消下发
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(params = "doCancel")
+	@ResponseBody
+	public AjaxJson doCancel(CustomerSerEntity customerSer,CustomerSerPage customerSerPage, HttpServletRequest request) {
+		List<ServiceReplyEntity> adviceReplyList =  customerSerPage.getAdviceReplyList();
+		AjaxJson j = new AjaxJson();
+		message = "投诉单下发成功";
+		try{
+            String dept = (String) request.getParameter("ids");
+            CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, dept);
+            if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待客服确认)){
+            	message = "受理单还未确认，取消下发失败!";
+            }else if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待客服下发)){ 
+            	message = "受理单还未下发，取消失败!";
+            }else if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待部门处理)){
+            	cus.setAstatus(ADVICESTATUS.等待客服下发);
+            	message = "取消下发成功!";
+            	
+            }else if(cus.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待反馈结果)){
+            	
+            	message = "部门已处理完，取消下发失败!";
+            }
+			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+		}catch(Exception e){
+			e.printStackTrace();
+			message = "取消下发失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -193,7 +241,31 @@ public class CustomerSerController extends BaseController {
 					cus.setComDatetime(DataUtils.getDate());
 					cus.setComName(ResourceUtil.getSessionUserName().getUserName());
 				}else if(returnS.equalsIgnoreCase("2")){
-					message = "短信反馈结果成功";
+					message = "短信发送成功";
+					CustomerSerEntity cus = systemService.getEntity(CustomerSerEntity.class, customerSer.getId());
+					String hql = "FROM ServiceReplyEntity e WHERE e.aorder=?";
+					List<ServiceReplyEntity> reply = systemService.findHql(hql, cus.getAorder());
+				    //判断是否只有一条回复
+                    if(reply!=null&&reply.size()==1){
+                    	ServiceReplyEntity sr = reply.get(0);
+    					Message msg = new Message();
+    					StringBuffer sb = new StringBuffer();
+    					sb.append(ResourceUtil.getConfigByName("title"));
+    					sb.append(HTMLSpirit.delHTMLTag(sr.getAcontent()));
+    					sb.append(ResourceUtil.getConfigByName("last"));
+    				    msg.setContent(sb.toString());
+    				    msg.setPhone(cus.getAtel());
+    				    String s = MessageUtil.send(msg);
+    				    if(s!=null&&s.equalsIgnoreCase("0")){
+    				    	cus.setAstatus(ADVICESTATUS.已完成);
+    				    	cus.setComDatetime(DataUtils.getDate());
+    				    	cus.setComName(ResourceUtil.getSessionUserName().getUserName());
+    				    }else{
+    						message = "短信发送失败";
+    				    }
+                    }
+					 
+			
 					
 				}
 				
@@ -539,5 +611,30 @@ public class CustomerSerController extends BaseController {
 			j.setMsg(message);
 			
 			return j;
+		}
+		
+		/**
+		 * 预览
+		 * 
+		 * @return
+		 */
+		@RequestMapping(params = "preview")
+		public ModelAndView preview(CustomerSerEntity customerAdvice,
+				HttpServletRequest req) {
+		        String nam = customerAdvice.getAfile();
+                nam = nam.replace("|", "%");            
+				req.setAttribute("customerAdvice", URLDecoder.decode(nam));
+			
+			return new ModelAndView("com/jinbo/customer/customerservice/Preview");
+		}
+		
+		@RequestMapping(params = "downFile")
+		public ModelAndView downFile(String path,
+				HttpServletRequest req) {
+		  //      String nam = customerAdvice.getAfile();
+             //   nam = nam.replace("|", "%");            
+			//	req.setAttribute("customerAdvice", URLDecoder.decode(nam));
+			
+			return new ModelAndView("com/jinbo/customer/customerservice/Preview");
 		}
 }

@@ -91,7 +91,7 @@
 				<label class="Validform_label">投诉内容:</label>
 			</td>
 			<td class="value"  colspan="3">
-				 <textarea id="acontent" name="acontent"  disabled='true'>${deptSerPage.acontent}</textarea>
+				 <textarea id="acontent" name="acontent"  disabled='true' rows="9" cols="60">${deptSerPage.acontent}</textarea>
 				<span class="Validform_checktip"></span>
 				<label class="Validform_label" style="display: none;">投诉内容</label>
 			</td>

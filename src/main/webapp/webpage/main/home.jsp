@@ -24,13 +24,5 @@
 </ul>
 </div>
 <div style="margin-top: 20px;">
-<h3>技术交流</h3>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本系统由JEECG开源社区提供，JEECG微云快速开发平台，永久开源免费，为大家提供最好的<b>企业二次开发平台</b></p>
-<ul>
-	<li>交流群:106259349, 106838471, 289782002</li>
-	<li>创始人：张代浩</li>
-	<li>邮箱 ：jeecg@sina.com</li>
-	<li>论坛 ：<a href="http://www.jeecg.org">www.jeecg.org</a></li>
-	<li>合作 ：开源资助 | 技术支持| 项目合作</li>
-</ul>
+
 </div>

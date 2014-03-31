@@ -14,7 +14,7 @@
 <input id="id" name="id" type="hidden" value="${deptSerPage.id }">
 		<tr>
 			<td align="right"><label class="Validform_label">回复: </label></td>
-			<td class="value"><t:ckeditor name="acontent" isfinder="true" value="${poVal.acontent }" type="width:600"></t:ckeditor></td>
+			<td class="value"><t:ckeditor name="acontent" isfinder="true" value="${deptreply!=null?deptreply.acontent:'' }" type="width:600"></t:ckeditor></td>
 		</tr>
 	</table>
 </t:formvalid>

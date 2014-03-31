@@ -17,6 +17,7 @@ import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.common.model.json.DataGrid;
 import org.jeecgframework.core.constant.Globals;
+import org.jeecgframework.core.util.ADVICESTATUS;
 import org.jeecgframework.core.util.DataUtils;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.StringUtil;
@@ -101,7 +102,8 @@ public class DeptSerController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "2");
+		cq.ge("astatus", ADVICESTATUS.等待部门处理);
+		cq.le("astatus", ADVICESTATUS.等待反馈结果);
 		cq.eq("aadept", ResourceUtil.getSessionUserName().getTSDepart().getId());
 		cq.add();
 		this.deptSerService.getDataGridReturn(cq, true);
@@ -195,8 +197,8 @@ public class DeptSerController extends BaseController {
 		message = "回复成功";
 		try{
 			CustomerSerEntity dept = systemService.getEntity(CustomerSerEntity.class, deptSer.getId());
-		    if(dept.getAstatus().equalsIgnoreCase("2")){
-		    	 dept.setAstatus("3");
+		    if(dept.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待部门处理)){
+		    	 dept.setAstatus(ADVICESTATUS.等待反馈结果);
 				    dept.setDeDatetime(DataUtils.getDate());
 				    dept.setDeName(ResourceUtil.getSessionUserName().getTSDepart().getDepartname());
 				    systemService.updateEntitie(dept);
@@ -209,14 +211,18 @@ public class DeptSerController extends BaseController {
 						deptSerService.save(de);
 					
 				
-		    }else if(dept.getAstatus().equalsIgnoreCase("3")){
-		    	for(ServiceReplyEntity de:deptReplyList){
-					if(de.getId()!=null||de.getId().length()>0){
-						ServiceReplyEntity old = systemService.getEntity(ServiceReplyEntity.class, de.getId());
-						UpdateUtil.update(old, de);
-						systemService.updateEntitie(old);
+		    }else if(dept.getAstatus().equalsIgnoreCase(ADVICESTATUS.等待反馈结果)){
+					if(dept.getId()!=null||dept.getId().length()>0){
+						List<ServiceReplyEntity> old = systemService.findHql("FROM ServiceReplyEntity e WHERE e.aorder=?", dept.getAorder());
+						if(old!=null&&old.size()==1){
+							ServiceReplyEntity ol = old.get(0);
+							 ol.setAcontent(request.getParameter("acontent"));
+							 systemService.updateEntitie(ol);
+						}else{
+							message = "修改回复失败";
+						}
 					}
-					}
+					
 		    }
 		   
 	//		String adviceId = deptSer.getId();
@@ -255,6 +261,10 @@ public class DeptSerController extends BaseController {
 	public ModelAndView goUpdate(CustomerSerEntity deptSer, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(deptSer.getId())) {
 			deptSer = deptSerService.getEntity(CustomerSerEntity.class, deptSer.getId());
+			List<ServiceReplyEntity> old = systemService.findHql("FROM ServiceReplyEntity e WHERE e.aorder=?", deptSer.getAorder());
+            if(old!=null&&old.size()==1){
+            	req.setAttribute("deptreply", old.get(0));
+            }
 			req.setAttribute("deptSerPage", deptSer);
 		}
 		return new ModelAndView("com/jinbo/customer/deptreply/deptReplyList");

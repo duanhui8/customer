@@ -122,7 +122,7 @@
 				button : [ {
 					name : '确定',
 					callback : function() {
-						queryConfirm(id);
+						queryConfirmDD(id);
 
 					}
 				} ],
@@ -151,7 +151,7 @@
 
 	}
 
-	function queryConfirm(id) {
+	function queryConfirmDD(id) {
 		$.ajax({
 			async : false,
 			cache : false,
@@ -165,7 +165,7 @@
 					var msg = d.msg;
 					if (msg == "1") {
 						tip("你还未评价，请先进行评价！");
-						evaluate(id);
+						evaluatewwf(id);
 					}
 					/* tip(msg);
 					reloadTable(); */
@@ -173,7 +173,7 @@
 			}
 		});
 	}
-	function evaluate(id) {
+	function evaluatewwf(id) {
 		$
 				.dialog({
 					title : "评价",

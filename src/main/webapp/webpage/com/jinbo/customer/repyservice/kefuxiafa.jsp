@@ -57,8 +57,8 @@
 				<label class="Validform_label" style="display: none;">投诉部门</label></td>
 				
 				  <td align="left">
-					       	<input name="note" maxlength="500" 
-						  		type="text" class="inputxt"  style="width:250px;"
+					       	<input name="anotes" maxlength="500" 
+						  		type="text" class="inputxt"  style="width:250px; value="${customerSerPage.anotes}"
 					               
 					                >
 					  <label class="Validform_label" style="display: none;">备注</label>

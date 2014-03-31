@@ -15,7 +15,7 @@
 		<tr>
 			<td align="right"><label class="Validform_label">回复: </label></td>
 			<td class="value">	<t:dictSelect field="returnS" type="list" divClass="backgroud:red"
-						typeGroupCode="returns" defaultVal="${customerAdvicePage.source}" hasLabel="false"  title="投诉部门">
+						typeGroupCode="returns" defaultVal="${customerSerPage.ainfo}" hasLabel="false"  title="投诉部门">
 						</t:dictSelect>   </td>
 		</tr>
 			<tr>

@@ -99,8 +99,9 @@ public class CustomerSerQueryController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		cq.eq("astatus", "4");
-		cq.eq("slName", ResourceUtil.getSessionUserName().getUserName());
+		//修改让所有人都能查到
+		//cq.eq("astatus", "4");
+		//cq.eq("slName", ResourceUtil.getSessionUserName().getUserName());
 		cq.add();
 		this.customerQueryControllerService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -231,19 +232,21 @@ public class CustomerSerQueryController extends BaseController {
 		    	List<EvaluateEntity> lists = systemService.findHql("FROM EvaluateEntity e WHERE e.kefuid =?",ResourceUtil.getSessionUserName().getId());
 				for(EvaluateEntity en : lists){
 	            	String pj = en.getKefupj();
-	            	if(pj.equalsIgnoreCase("0")){
-	            		feichang++;
-	            	}else if(pj.equalsIgnoreCase("1")){           
-	            		manyi++;
-	            		
-	            	}else if(pj.equalsIgnoreCase("2")){
-	            		yiban++;
-	            		
-	            	}else if(pj.equalsIgnoreCase("3")){
-	            		jiaocha++;
-	            		
-	            	}else if(pj.equalsIgnoreCase("4")){
-	            		hencha++;
+	            	if(pj!=null&&pj.length()>0){
+	            		if(pj.equalsIgnoreCase("0")){
+		            		feichang++;
+		            	}else if(pj.equalsIgnoreCase("1")){           
+		            		manyi++;
+		            		
+		            	}else if(pj.equalsIgnoreCase("2")){
+		            		yiban++;
+		            		
+		            	}else if(pj.equalsIgnoreCase("3")){
+		            		jiaocha++;
+		            		
+		            	}else if(pj.equalsIgnoreCase("4")){
+		            		hencha++;
+		            	}
 	            	}
 	            }
 				double cont  = con;
